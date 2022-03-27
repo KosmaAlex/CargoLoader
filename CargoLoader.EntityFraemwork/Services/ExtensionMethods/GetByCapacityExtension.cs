@@ -11,12 +11,12 @@ namespace CargoLoader.EntityFraemwork.Services.ExtensionMethods
 {
     public static class GetByCapacityExtension
     {
-        public static async Task<IEnumerable<IItem>> GetByCapacityAsync(this IItemDataService dataService,
+        public static async Task<IEnumerable<T>> GetByCapacityAsync<T>(this IItemDataService<T> dataService,
             double capacity, double minCapacity = default)
         {
             string propertyName = "Capacity";
 
-            IEnumerable<IItem> result = await dataService.GetByCustomProperty(propertyName, capacity, minCapacity);
+            IEnumerable<T> result = await dataService.GetByCustomProperty(propertyName, capacity, minCapacity);
 
             if(result == null)
             {

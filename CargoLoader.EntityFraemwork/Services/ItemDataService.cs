@@ -20,7 +20,7 @@ namespace CargoLoader.EntityFraemwork.Services
     /// because 0 is a default for double.
     /// </summary>
     /// <typeparam name="T"></typeparam>
-    public class ItemDataService<T> : IItemDataService where T : DomainObject, IItem
+    public class ItemDataService<T> : IItemDataService<T> where T : DomainObject, IItem
     {
         private readonly CargoLoaderDbContextFactory _contextFactory;
         private readonly NonQueryDataService<T> _nonQueryDataService;
@@ -32,9 +32,9 @@ namespace CargoLoader.EntityFraemwork.Services
             _nonQueryDataService = new NonQueryDataService<T>(contextFactory);
         }
 
-        public async Task Create(IItem entity)
+        public async Task Create(T entity)
         {
-            await _nonQueryDataService.Create((T)entity);
+            await _nonQueryDataService.Create(entity);
         }
 
         public async Task<bool> Delete(int id)
@@ -42,23 +42,18 @@ namespace CargoLoader.EntityFraemwork.Services
             return await _nonQueryDataService.Delete(id);
         }
 
-        public async Task<IItem> Get(int id)
+        public async Task<T> Get(int id)
         {
             T result = await _nonQueryDataService.Get(id);
             return result;
         }
 
-        public async Task<IEnumerable<IItem>> GetAll()
+        public async Task<IEnumerable<T>> GetAll()
         {
             return await _nonQueryDataService.GetAll();
         }
 
-        //public Task<IEnumerable<IItem>> GetByCapacity(double capacity)
-        //{
-        //    throw new NotImplementedException();
-        //}
-
-        public async Task<IEnumerable<IItem>> GetByCustomProperty(string propertyName,
+        public async Task<IEnumerable<T>> GetByCustomProperty(string propertyName,
             double parameter, double minParameter = default)
         {
             if(minParameter == default)
@@ -81,7 +76,7 @@ namespace CargoLoader.EntityFraemwork.Services
             }
         }
 
-        public async Task<IEnumerable<IItem>> GetByCustomProperty(string propertyName, bool parameter)
+        public async Task<IEnumerable<T>> GetByCustomProperty(string propertyName, bool parameter)
         {
             using (CargoLoaderDbContext context = _contextFactory.CreateContext())
             {
@@ -98,7 +93,7 @@ namespace CargoLoader.EntityFraemwork.Services
             }
         }
 
-        public async Task<IEnumerable<IItem>> GetByHeight(double height, double minHeight = default)
+        public async Task<IEnumerable<T>> GetByHeight(double height, double minHeight = default)
         {
             if(minHeight == default)
             {
@@ -120,7 +115,7 @@ namespace CargoLoader.EntityFraemwork.Services
             }
         }
 
-        public async Task<IEnumerable<IItem>> GetByIsContainer(bool isContainer)
+        public async Task<IEnumerable<T>> GetByIsContainer(bool isContainer)
         {
             using (CargoLoaderDbContext context = _contextFactory.CreateContext())
             {
@@ -135,7 +130,7 @@ namespace CargoLoader.EntityFraemwork.Services
             }
         }
 
-        public async Task<IEnumerable<IItem>> GetByIsFragile(bool isFragile)
+        public async Task<IEnumerable<T>> GetByIsFragile(bool isFragile)
         {
             using (CargoLoaderDbContext context = _contextFactory.CreateContext())
             {
@@ -150,7 +145,7 @@ namespace CargoLoader.EntityFraemwork.Services
             }
         }
 
-        public async Task<IEnumerable<IItem>> GetByIsProp(bool isProp)
+        public async Task<IEnumerable<T>> GetByIsProp(bool isProp)
         {
             using (CargoLoaderDbContext context = _contextFactory.CreateContext())
             {
@@ -165,7 +160,7 @@ namespace CargoLoader.EntityFraemwork.Services
             }
         }
 
-        public async Task<IEnumerable<IItem>> GetByIsRotatable(bool isRotatable)
+        public async Task<IEnumerable<T>> GetByIsRotatable(bool isRotatable)
         {
             using (CargoLoaderDbContext context = _contextFactory.CreateContext())
             {
@@ -182,7 +177,7 @@ namespace CargoLoader.EntityFraemwork.Services
             }
         }
 
-        public async Task<IEnumerable<IItem>> GetByLength(double length, double minLength = default)
+        public async Task<IEnumerable<T>> GetByLength(double length, double minLength = default)
         {
             if(minLength == default)
             {
@@ -204,7 +199,7 @@ namespace CargoLoader.EntityFraemwork.Services
             }
         }
 
-        public async Task<IItem> GetByMarking(string marking)
+        public async Task<T> GetByMarking(string marking)
         {
             using (CargoLoaderDbContext context = _contextFactory.CreateContext())
             {
@@ -219,7 +214,7 @@ namespace CargoLoader.EntityFraemwork.Services
             }
         }
 
-        public async Task<IEnumerable<IItem>> GetByName(string name)
+        public async Task<IEnumerable<T>> GetByName(string name)
         {
             using (CargoLoaderDbContext context = _contextFactory.CreateContext())
             {
@@ -236,7 +231,7 @@ namespace CargoLoader.EntityFraemwork.Services
             }
         }
 
-        public async Task<IEnumerable<IItem>> GetByVolume(double volume, double minVolume = default)
+        public async Task<IEnumerable<T>> GetByVolume(double volume, double minVolume = default)
         {
             using (CargoLoaderDbContext context = _contextFactory.CreateContext())
             {
@@ -258,7 +253,7 @@ namespace CargoLoader.EntityFraemwork.Services
             }
         }
 
-        public async Task<IEnumerable<IItem>> GetByWeight(double weight, double minWeight = default)
+        public async Task<IEnumerable<T>> GetByWeight(double weight, double minWeight = default)
         {
             using (CargoLoaderDbContext context = _contextFactory.CreateContext())
             {
@@ -281,7 +276,7 @@ namespace CargoLoader.EntityFraemwork.Services
             }
         }
 
-        public async Task<IEnumerable<IItem>> GetByWidth(double width, double minWidth = default)
+        public async Task<IEnumerable<T>> GetByWidth(double width, double minWidth = default)
         {
             if(minWidth == default)
             {
@@ -303,9 +298,9 @@ namespace CargoLoader.EntityFraemwork.Services
             }
         }
 
-        public async Task<IItem> Update(int id, IItem entity)
+        public async Task<T> Update(int id, T entity)
         {
-            return await _nonQueryDataService.Update(id, (T)entity);
+            return await _nonQueryDataService.Update(id, entity);
         }
     }
 }

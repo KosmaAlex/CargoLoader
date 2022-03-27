@@ -13,12 +13,12 @@ namespace ConsoleApp1
         public static void Main(string[] args)
         {
             IOrderDataService orderDataService = new OrderDataService(new CargoLoaderDbContextFactory());
-            IItemDataService productDataService = new ItemDataService<Product>(new CargoLoaderDbContextFactory());
-            IItemDataService containerDataService = new ItemDataService<Container>(new CargoLoaderDbContextFactory());
+            IItemDataService<Product> productDataService = new ItemDataService<Product>(new CargoLoaderDbContextFactory());
+            IItemDataService<Container> containerDataService = new ItemDataService<Container>(new CargoLoaderDbContextFactory());
 
             //Fill();
 
-            List<Container> containers = (List<Container>)containerDataService.GetByCapacityAsync(30).Result;
+            List<Container> containers = (List<Container>)containerDataService.GetByCapacityAsync<Container>(40).Result;
             //List<Container> containers = (List<Container>)containerDataService.GetByCustomProperty("IsFragile", false).Result;
 
             foreach(Container container in containers)
@@ -26,52 +26,7 @@ namespace ConsoleApp1
                 Console.WriteLine($"{container.Name} {container.Id} {container.Capacity}");
             }
 
-
-            #region Test
-            //TestProductRangeParametr(productDataService.GetByHeight, 5);
-            //TestContainerRangeParametr(containerDataService.GetByHeight, 12, 2);
-            //Console.WriteLine("-------------------");
-
-            //TestProductRangeParametr(productDataService.GetByLength, 9);
-            //TestContainerRangeParametr(containerDataService.GetByLength, 18, 6);
-            //Console.WriteLine("-------------------");
-
-            //TestProductRangeParametr(productDataService.GetByWidth, 7);
-            //TestContainerRangeParametr(containerDataService.GetByWidth, 10, 2);
-            //Console.WriteLine("-------------------");
-
-            //TestProductRangeParametr(productDataService.GetByVolume, 315);
-            //TestContainerRangeParametr(containerDataService.GetByVolume, 1300, 120);
-            //Console.WriteLine("-------------------");
-
-            //TestProductRangeParametr(productDataService.GetByWeight, 3.5);
-            //TestContainerRangeParametr(containerDataService.GetByWeight, 10, 0);
-            //Console.WriteLine("-------------------");
-
-            //TestProduct<bool>(productDataService.GetByIsRotatable, false);
-            //TestContainer<bool>(containerDataService.GetByIsRotatable, true);
-            //Console.WriteLine("-------------------");
-
-            //TestProduct<bool>(productDataService.GetByIsProp, true);
-            //TestContainer<bool>(containerDataService.GetByIsProp, false);
-            //Console.WriteLine("-------------------");
-
-            //TestProduct<bool>(productDataService.GetByIsContainer, false);
-            //TestContainer<bool>(containerDataService.GetByIsContainer, true);
-            //Console.WriteLine("-------------------");
-
-            //TestProduct<bool>(productDataService.GetByIsFragile, true);
-            //TestContainer<bool>(containerDataService.GetByIsFragile, false);
-            //Console.WriteLine("-------------------");
-
-            //TestProduct<string>(productDataService.GetByName, "ck");
-            //TestContainer<string>(containerDataService.GetByName, "Box");
-            //Console.WriteLine("-------------------");
-
-            //TestProductMarking(productDataService.GetByMarking, "Block:9x7x");
-            //TestContainerMarking(containerDataService.GetByMarking, "Carton:8x4x4");
-            //Console.WriteLine("-------------------");
-            #endregion
+            //Test();
 
             Console.WriteLine("Done");
             Console.ReadKey();            
@@ -80,8 +35,8 @@ namespace ConsoleApp1
         public async static void Fill()
         {
             IOrderDataService orderDataService = new OrderDataService(new CargoLoaderDbContextFactory());
-            IItemDataService productDataService = new ItemDataService<Product>(new CargoLoaderDbContextFactory());
-            IItemDataService containerDataService = new ItemDataService<Container>(new CargoLoaderDbContextFactory());
+            IItemDataService<Product> productDataService = new ItemDataService<Product>(new CargoLoaderDbContextFactory());
+            IItemDataService<Container> containerDataService = new ItemDataService<Container>(new CargoLoaderDbContextFactory());
 
             Product productB = new Product()
             {
@@ -148,9 +103,60 @@ namespace ConsoleApp1
             await containerDataService.Create(containerB);
         }
 
+        public static void Test()
+        {
+            IOrderDataService orderDataService = new OrderDataService(new CargoLoaderDbContextFactory());
+            IItemDataService<Product> productDataService = new ItemDataService<Product>(new CargoLoaderDbContextFactory());
+            IItemDataService<Container> containerDataService = new ItemDataService<Container>(new CargoLoaderDbContextFactory());
+
+            TestProductRangeParametr(productDataService.GetByHeight, 5);
+            TestContainerRangeParametr(containerDataService.GetByHeight, 12, 2);
+            Console.WriteLine("-------------------");
+
+            TestProductRangeParametr(productDataService.GetByLength, 9);
+            TestContainerRangeParametr(containerDataService.GetByLength, 18, 6);
+            Console.WriteLine("-------------------");
+
+            TestProductRangeParametr(productDataService.GetByWidth, 7);
+            TestContainerRangeParametr(containerDataService.GetByWidth, 10, 2);
+            Console.WriteLine("-------------------");
+
+            TestProductRangeParametr(productDataService.GetByVolume, 315);
+            TestContainerRangeParametr(containerDataService.GetByVolume, 1300, 120);
+            Console.WriteLine("-------------------");
+
+            TestProductRangeParametr(productDataService.GetByWeight, 3.5);
+            TestContainerRangeParametr(containerDataService.GetByWeight, 10, 0);
+            Console.WriteLine("-------------------");
+
+            TestProduct<bool>(productDataService.GetByIsRotatable, false);
+            TestContainer<bool>(containerDataService.GetByIsRotatable, true);
+            Console.WriteLine("-------------------");
+
+            TestProduct<bool>(productDataService.GetByIsProp, true);
+            TestContainer<bool>(containerDataService.GetByIsProp, false);
+            Console.WriteLine("-------------------");
+
+            TestProduct<bool>(productDataService.GetByIsContainer, false);
+            TestContainer<bool>(containerDataService.GetByIsContainer, true);
+            Console.WriteLine("-------------------");
+
+            TestProduct<bool>(productDataService.GetByIsFragile, true);
+            TestContainer<bool>(containerDataService.GetByIsFragile, false);
+            Console.WriteLine("-------------------");
+
+            TestProduct<string>(productDataService.GetByName, "ck");
+            TestContainer<string>(containerDataService.GetByName, "Box");
+            Console.WriteLine("-------------------");
+
+            TestProductMarking(productDataService.GetByMarking, "Block:9x7x");
+            TestContainerMarking(containerDataService.GetByMarking, "Carton:8x4x4");
+            Console.WriteLine("-------------------");
+        }
+
         #region TestMethods
         delegate Task<IEnumerable<IItem>> GetBy(double parameter, double minParameter);
-        public static void TestProductRangeParametr(Func<double, double ,Task<IEnumerable<IItem>>> func,
+        public static void TestProductRangeParametr<T>(Func<double, double ,Task<IEnumerable<T>>> func,
             double parameter, double minParameter = default)
         {
             Console.WriteLine(func.Method.Name);
@@ -164,7 +170,7 @@ namespace ConsoleApp1
             }
         }
 
-        public static void TestContainerRangeParametr(Func<double, double, Task<IEnumerable<IItem>>> func,
+        public static void TestContainerRangeParametr<T>(Func<double, double, Task<IEnumerable<T>>> func,
             double parameter, double minParameter = default)
         {
             Console.WriteLine(func.Method.Name);
@@ -178,7 +184,7 @@ namespace ConsoleApp1
             }
         }
 
-        public static void TestProduct<T>(Func<T, Task<IEnumerable<IItem>>> func, T parameter)
+        public static void TestProduct<T>(Func<T, Task<IEnumerable<Product>>> func, T parameter)
         {
             Console.WriteLine(func.Method.Name);
 
@@ -191,7 +197,7 @@ namespace ConsoleApp1
             }
         }
 
-        public static void TestContainer<T>(Func<T, Task<IEnumerable<IItem>>> func, T parameter)
+        public static void TestContainer<T>(Func<T, Task<IEnumerable<Container>>> func, T parameter)
         {
             Console.WriteLine(func.Method.Name);
 
@@ -204,7 +210,7 @@ namespace ConsoleApp1
             }
         }
 
-        public static void TestProductMarking(Func<string, Task<IItem>> func, string parameter)
+        public static void TestProductMarking(Func<string, Task<Product>> func, string parameter)
         {
             Console.WriteLine(func.Method.Name);
 
@@ -226,7 +232,7 @@ namespace ConsoleApp1
             }
         }
 
-        public static void TestContainerMarking(Func<string, Task<IItem>> func, string parameter)
+        public static void TestContainerMarking(Func<string, Task<Container>> func, string parameter)
         {
             Console.WriteLine(func.Method.Name);
 
