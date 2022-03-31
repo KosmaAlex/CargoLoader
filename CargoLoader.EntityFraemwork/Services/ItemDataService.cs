@@ -67,7 +67,7 @@ namespace CargoLoader.EntityFraemwork.Services
                     .Where($"{propertyName} <= {parameter} && {propertyName} >= {minParameter}")
                     .ToListAsync();
 
-                if(result == null)
+                if(result.Count() == 0)
                 {
                     throw new ItemNotFoundException(propertyName);
                 }
@@ -84,7 +84,7 @@ namespace CargoLoader.EntityFraemwork.Services
                     .Where($"{propertyName} == {parameter}")
                     .ToListAsync();
 
-                if (result == null)
+                if (result.Count() == 0)
                 {
                     throw new ItemNotFoundException(propertyName);
                 }
@@ -119,9 +119,11 @@ namespace CargoLoader.EntityFraemwork.Services
         {
             using (CargoLoaderDbContext context = _contextFactory.CreateContext())
             {
-                IEnumerable<T> result = await context.Set<T>().Where(e => e.IsContainer == isContainer).ToListAsync();
+                IEnumerable<T> result = await context.Set<T>()
+                    .Where(e => e.IsContainer == isContainer)
+                    .ToListAsync();
 
-                if (result == null)
+                if (result.Count() == 0)
                 {
                     throw new ItemNotFoundException(nameof(isContainer));
                 }
@@ -134,9 +136,11 @@ namespace CargoLoader.EntityFraemwork.Services
         {
             using (CargoLoaderDbContext context = _contextFactory.CreateContext())
             {
-                IEnumerable<T> result = await context.Set<T>().Where(e => e.IsFragile == isFragile).ToListAsync();
+                IEnumerable<T> result = await context.Set<T>()
+                    .Where(e => e.IsFragile == isFragile)
+                    .ToListAsync();
 
-                if (result == null)
+                if (result.Count() == 0)
                 {
                     throw new ItemNotFoundException(nameof(isFragile));
                 }
@@ -149,9 +153,11 @@ namespace CargoLoader.EntityFraemwork.Services
         {
             using (CargoLoaderDbContext context = _contextFactory.CreateContext())
             {
-                IEnumerable<T> result = await context.Set<T>().Where(e => e.IsProp == isProp).ToListAsync();
+                IEnumerable<T> result = await context.Set<T>()
+                    .Where(e => e.IsProp == isProp)
+                    .ToListAsync();
 
-                if (result == null)
+                if (result.Count() == 0)
                 {
                     throw new ItemNotFoundException(nameof(isProp));
                 }
@@ -168,7 +174,7 @@ namespace CargoLoader.EntityFraemwork.Services
                     .Where(e => e.IsRotatable == isRotatable)
                     .ToListAsync();
 
-                if (result == null)
+                if (result.Count() == 0)
                 {
                     throw new ItemNotFoundException(nameof(isRotatable));
                 }
@@ -190,7 +196,7 @@ namespace CargoLoader.EntityFraemwork.Services
                     .Where(e => e.Length <= length && e.Length >= minLength)
                     .ToListAsync();
 
-                if (result == null)
+                if (result.Count() == 0)
                 {
                     throw new ItemNotFoundException(nameof(length));
                 }
@@ -203,7 +209,8 @@ namespace CargoLoader.EntityFraemwork.Services
         {
             using (CargoLoaderDbContext context = _contextFactory.CreateContext())
             {
-                T result = await context.Set<T>().FirstOrDefaultAsync(e => e.Marking == marking);
+                T result = await context.Set<T>()
+                    .FirstOrDefaultAsync(e => e.Marking == marking);
 
                 if(result == null)
                 {
@@ -222,7 +229,7 @@ namespace CargoLoader.EntityFraemwork.Services
                     .Where(e => e.Name.Contains(name))
                     .ToListAsync();
 
-                if(result == null)
+                if(result.Count() == 0)
                 {
                     throw new ItemNotFoundException(nameof(name));
                 }
@@ -244,7 +251,7 @@ namespace CargoLoader.EntityFraemwork.Services
                     .Where(e => e.Volume <= volume && e.Volume >= minVolume)
                     .ToListAsync();
 
-                if (result == null)
+                if (result.Count() == 0)
                 {
                     throw new ItemNotFoundException(nameof(volume));
                 }

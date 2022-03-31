@@ -1,4 +1,5 @@
-﻿using CargoLoader.Domain.Models;
+﻿using CargoLoader.Domain.Exceptions;
+using CargoLoader.Domain.Models;
 using CargoLoader.Domain.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
@@ -39,7 +40,14 @@ namespace CargoLoader.EntityFraemwork.Services.Common
         {
             using(CargoLoaderDbContext context = _contextFactory.CreateContext())
             {
-                T entity = await context.Set<T>().FirstOrDefaultAsync(e => e.Id == id);
+                T entity = await context.Set<T>()
+                    .FirstOrDefaultAsync(e => e.Id == id);
+
+                if(entity == null)
+                {
+                    throw new EntityDoesNotExistException(typeof(T).Name, nameof(entity.Id), id.ToString());
+                }
+
                 context.Set<T>().Remove(entity);
                 await context.SaveChangesAsync();
 
@@ -51,7 +59,14 @@ namespace CargoLoader.EntityFraemwork.Services.Common
         {
             using (CargoLoaderDbContext context = _contextFactory.CreateContext())
             {
-                T entity = await context.Set<T>().FirstOrDefaultAsync(e => e.Id == id);
+                T entity = await context.Set<T>()
+                    .FirstOrDefaultAsync(e => e.Id == id);
+
+                if( entity == null)
+                {
+                    throw new EntityDoesNotExistException(typeof(T).Name, nameof(entity.Id), id.ToString());
+                }
+
                 return entity;
             }
         }

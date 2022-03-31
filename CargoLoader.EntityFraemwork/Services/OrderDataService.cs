@@ -46,10 +46,15 @@ namespace CargoLoader.EntityFraemwork.Services
         public async Task<Order> Get(int id)
         {
             using (CargoLoaderDbContext context = _contextFactory.CreateContext())
-            {
+             {
                 Order order = await context.Orders
                     .Include(o => o.Cargo)
                     .FirstOrDefaultAsync(o => o.Id == id);
+
+                if(order == null)
+                {
+                    throw new EntityDoesNotExistException(nameof(Order), nameof(Order.Id), id.ToString());
+                }
 
                 return order;
             }
@@ -74,6 +79,11 @@ namespace CargoLoader.EntityFraemwork.Services
                 Order order = await context.Orders
                     .Include(o => o.Cargo)
                     .FirstOrDefaultAsync(o => o.OrderNumber == orderNumber);
+
+                if (order == null)
+                {
+                    throw new EntityDoesNotExistException(nameof(Order), nameof(Order.OrderNumber), orderNumber);
+                }
 
                 return order;
             }

@@ -165,7 +165,16 @@ namespace ConsoleApp1
             Order order = new Order();
             order.OrderNumber = "111";
 
-            order = await orderDataService.Get(1);
+            try
+            {
+                await orderDataService.Delete(3);
+            }
+            catch (EntityDoesNotExistException ex)
+            {
+                Console.WriteLine(ex.EntityName);
+                Console.WriteLine(ex.RequestedParameter);
+                Console.WriteLine(ex.ParameterValue);
+            }
             Console.WriteLine(order.Id);
             //try
             //{
