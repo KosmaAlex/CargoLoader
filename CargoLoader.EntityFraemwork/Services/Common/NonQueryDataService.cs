@@ -1,4 +1,5 @@
 ﻿using CargoLoader.Domain.Models;
+using CargoLoader.Domain.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using System;
@@ -10,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace CargoLoader.EntityFraemwork.Services.Common
 {
-    public class NonQueryDataService<T> where T : DomainObject
+    public class NonQueryDataService<T> : IDataService<T> where T : DomainObject 
     {
         private readonly CargoLoaderDbContextFactory _contextFactory;
 

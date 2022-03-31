@@ -98,17 +98,17 @@ namespace CargoLoader.EntityFraemwork.Services
             if(minHeight == default)
             {
                 minHeight = height;
-            }            
-
+            }
+                        
             using(CargoLoaderDbContext context = _contextFactory.CreateContext())
             {
                 IEnumerable<T> result = await context.Set<T>()
                     .Where(e => e.Height <= height && e.Height >= minHeight)
                     .ToListAsync();
 
-                if(result == null)
+                if(result.Count() == 0)
                 {
-                    throw new ItemNotFoundException(nameof(height));
+                    throw new ItemNotFoundException(nameof(IItem.Height));
                 }
 
                 return result;
@@ -267,7 +267,7 @@ namespace CargoLoader.EntityFraemwork.Services
                     .Where(e => e.Weight <= weight && e.Weight >= minWeight)
                     .ToListAsync();
 
-                if (result == null)
+                if (result.Count() == 0)
                 {
                     throw new ItemNotFoundException(nameof(weight));
                 }
@@ -289,7 +289,7 @@ namespace CargoLoader.EntityFraemwork.Services
                     .Where(e => e.Width <= width && e.Width >= minWidth)
                     .ToListAsync();
 
-                if (result == null)
+                if (result.Count() == 0)
                 {
                     throw new ItemNotFoundException(nameof(width));
                 }

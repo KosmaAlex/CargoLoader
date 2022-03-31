@@ -9,21 +9,21 @@ namespace CargoLoader.Domain.Exceptions
 {
     public class ItemNotFoundException : Exception
     {
-        public string RequestedParametr { get; }
+        public string RequestedParameter { get; }
 
         public ItemNotFoundException(string requestedParametr)
         {
-            RequestedParametr = requestedParametr;
+            RequestedParameter = requestedParametr;
         }
 
         public ItemNotFoundException(string requestedParametr, string? message) : base(message)
         {
-            RequestedParametr = requestedParametr;
+            RequestedParameter = requestedParametr;
         }
 
         public ItemNotFoundException(string requestedParametr, string? message, Exception? innerException) : base(message, innerException)
         {
-            RequestedParametr = requestedParametr;
+            RequestedParameter = requestedParametr;
         }
     }
 }

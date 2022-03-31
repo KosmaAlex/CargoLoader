@@ -22,18 +22,18 @@ namespace CargoLoader.EntityFraemwork.Services
             _nonQueryDataService = new NonQueryDataService<Order>(contextFactory);
         }
 
-        public async Task Create(Order entity)
+        public async Task Create(Order order)
         {
             using(CargoLoaderDbContext context = _contextFactory.CreateContext())
             {
-                Order order = await context.Orders.FirstOrDefaultAsync(o => o.OrderNumber == entity.OrderNumber);
+                Order existOrder = await context.Orders.FirstOrDefaultAsync(o => o.OrderNumber == order.OrderNumber);
 
-                if(order != null)
+                if(existOrder != null)
                 {
-                    throw new OrderAlreadyExistException(order.Id, order.OrderNumber);
+                    throw new OrderAlreadyExistException(existOrder.Id, existOrder.OrderNumber);
                 }
 
-                await context.Orders.AddAsync(entity);
+                await context.Orders.AddAsync(order);
                 await context.SaveChangesAsync();
             }
         }
@@ -79,7 +79,7 @@ namespace CargoLoader.EntityFraemwork.Services
             }
         }
 
-        public Task<Order> Update(int id, Order entity)
+        public Task<Order> Update(int id, Order order)
         {
             throw new NotImplementedException();
         }

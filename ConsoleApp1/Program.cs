@@ -28,6 +28,9 @@ namespace ConsoleApp1
 
             //Test();
 
+            TestException();
+
+
             Console.WriteLine("Done");
             Console.ReadKey();            
         }
@@ -153,6 +156,43 @@ namespace ConsoleApp1
             TestContainerMarking(containerDataService.GetByMarking, "Carton:8x4x4");
             Console.WriteLine("-------------------");
         }
+        public static async void TestException()
+        {
+            IOrderDataService orderDataService = new OrderDataService(new CargoLoaderDbContextFactory());
+            IItemDataService<Product> productDataService = new ItemDataService<Product>(new CargoLoaderDbContextFactory());
+            IItemDataService<Container> containerDataService = new ItemDataService<Container>(new CargoLoaderDbContextFactory());
+
+            Order order = new Order();
+            order.OrderNumber = "111";
+
+            order = await orderDataService.Get(1);
+            Console.WriteLine(order.Id);
+            //try
+            //{
+            //    await containerDataService.GetByHeight(11);
+            //}
+            //catch (ItemNotFoundException ex)
+            //{
+            //    Console.WriteLine(ex.RequestedParameter);
+            //}
+            //catch(Exception ex)
+            //{
+            //    Console.WriteLine(ex.Message);
+            //}
+
+            //try
+            //{
+            //    await containerDataService.GetByWidth(11);
+            //}
+            //catch (ItemNotFoundException ex)
+            //{
+            //    Console.WriteLine(ex.RequestedParameter);
+            //}
+            //catch (Exception ex)
+            //{
+            //    Console.WriteLine(ex.Message);
+            //}
+        }
 
         #region TestMethods
         delegate Task<IEnumerable<IItem>> GetBy(double parameter, double minParameter);
@@ -223,7 +263,7 @@ namespace ConsoleApp1
             }
             catch (ItemNotFoundException e)
             {
-                Debug.WriteLine(e.RequestedParametr);
+                Debug.WriteLine(e.RequestedParameter);
                 Debug.WriteLine("-------------");
             }    
             catch (Exception e)
