@@ -8,6 +8,11 @@
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
     <Grid>
-        <controls:NavigationBar/>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+        </Grid.RowDefinitions>
+        <controls:NavigationBar Grid.Row="0"/>
+        <ContentControl Grid.Row="1" Content="{Binding CurrentView}"/>
     </Grid>
 </Window>

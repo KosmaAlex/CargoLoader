@@ -12,8 +12,4 @@
     <ProjectReference Include="..\CargoLoader.EntityFraemwork\CargoLoader.EntityFraemwork.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Views\" />
-  </ItemGroup>
-
 </Project>

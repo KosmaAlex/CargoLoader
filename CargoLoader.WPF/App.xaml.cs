@@ -1,4 +1,6 @@
-﻿using System;
+﻿using CargoLoader.WPF.Navigators;
+using CargoLoader.WPF.ViewModels;
+using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
@@ -15,8 +17,17 @@ namespace CargoLoader.WPF
     {
 
         protected override void OnStartup(StartupEventArgs e)
-        {
+        {           
+
+            INavigator navigator = new Navigator();
+
             Window window = new MainWindow();
+
+            new OrdersViewModel(navigator);
+            new GoodsViewModel(navigator);
+            new TransportViewModel(navigator);
+
+            window.DataContext = new MainViewModel(navigator);
             window.Show();
         }
     }

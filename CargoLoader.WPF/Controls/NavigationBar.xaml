@@ -4,8 +4,16 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:CargoLoader.WPF.Controls"
+             xmlns:vm="clr-namespace:CargoLoader.WPF.ViewModels"
+             xmlns:nav="clr-namespace:CargoLoader.WPF.Navigators"
+             xmlns:converters="clr-namespace:CargoLoader.WPF.Converters"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
+
+    <UserControl.Resources>
+        <converters:EqualValueToParameterConverter x:Key="EqualValueToParameter"/>
+    </UserControl.Resources>
+    
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="auto"/>
@@ -24,9 +32,24 @@
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
 
-            <RadioButton Grid.Column="0" Foreground="AntiqueWhite" Content="Orders"/>
-            <RadioButton Grid.Column="1" Foreground="AntiqueWhite" Content="Goods"/>
-            <RadioButton Grid.Column="2" Foreground="AntiqueWhite" Content="Transport"/>
+            <RadioButton Grid.Column="0" Content="Orders"
+                         Foreground="AntiqueWhite"
+                         IsChecked="{Binding CurrentView, Mode=OneWay,
+                         Converter={StaticResource EqualValueToParameter},
+                         ConverterParameter={x:Type vm:OrdersViewModel}}"
+                         Command="{Binding UpdateCurrentViewCommand}"
+                         CommandParameter="{x:Static nav:ViewType.Orders}"/>
+            <RadioButton Grid.Column="1" Content="Goods"
+                         Foreground="AntiqueWhite"
+                         IsChecked="{Binding CurrentView, Mode=OneWay,
+                         Converter={StaticResource EqualValueToParameter},
+                         ConverterParameter={x:Type vm:GoodsViewModel}}"
+                         Command="{Binding UpdateCurrentViewCommand}"
+                         CommandParameter="{x:Static nav:ViewType.Goods}"/>
+            <RadioButton Grid.Column="2" Content="Transport"
+                         Foreground="AntiqueWhite"
+                         Command="{Binding UpdateCurrentViewCommand}"
+                         CommandParameter="{x:Static nav:ViewType.Transport}"/>
 
         </Grid>
     </Grid>
