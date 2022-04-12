@@ -22,7 +22,7 @@
             <DataTemplate DataType="{x:Type viewmodels:TransportViewModel}">
                 <views:TransportView/>
             </DataTemplate>
-            
+                        
         </ResourceDictionary>
     </Application.Resources>
 </Application>

@@ -20,8 +20,9 @@ namespace CargoLoader.WPF
     /// </summary>
     public partial class MainWindow : Window
     {
-        public MainWindow()
+        public MainWindow(object datacontext)
         {
+            DataContext = datacontext;
             InitializeComponent();
         }
     }

@@ -8,6 +8,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Microsoft.Extensions.Hosting" Version="6.0.1" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\cargoLoader.Domain\CargoLoader.Domain.csproj" />
     <ProjectReference Include="..\CargoLoader.EntityFraemwork\CargoLoader.EntityFraemwork.csproj" />
   </ItemGroup>
