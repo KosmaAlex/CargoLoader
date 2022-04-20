@@ -4,6 +4,8 @@ using CargoLoader.Domain.Services;
 using CargoLoader.EntityFraemwork;
 using CargoLoader.EntityFraemwork.Services;
 using CargoLoader.EntityFraemwork.Services.ExtensionMethods;
+using CargoLoader.GalacentreAPI;
+using CargoLoader.GalacentreAPI.Models;
 using System.Diagnostics;
 
 namespace ConsoleApp1
@@ -12,27 +14,42 @@ namespace ConsoleApp1
     {
         public static void Main(string[] args)
         {
-            IOrderDataService orderDataService = new OrderDataService(new CargoLoaderDbContextFactory());
-            IItemDataService<Product> productDataService = new ItemDataService<Product>(new CargoLoaderDbContextFactory());
-            IItemDataService<Container> containerDataService = new ItemDataService<Container>(new CargoLoaderDbContextFactory());
+            TestDeserealization();
 
-            //Fill();
+            //IOrderDataService orderDataService = new OrderDataService(new CargoLoaderDbContextFactory());
+            //IItemDataService<Product> productDataService = new ItemDataService<Product>(new CargoLoaderDbContextFactory());
+            //IItemDataService<Container> containerDataService = new ItemDataService<Container>(new CargoLoaderDbContextFactory());
 
-            List<Container> containers = (List<Container>)containerDataService.GetByCapacityAsync<Container>(40).Result;
-            //List<Container> containers = (List<Container>)containerDataService.GetByCustomProperty("IsFragile", false).Result;
+            ////Fill();
 
-            foreach(Container container in containers)
-            {
-                Console.WriteLine($"{container.Name} {container.Id} {container.Capacity}");
-            }
+            //List<Container> containers = (List<Container>)containerDataService.GetByCapacityAsync<Container>(40).Result;
+            ////List<Container> containers = (List<Container>)containerDataService.GetByCustomProperty("IsFragile", false).Result;
 
-            //Test();
+            //foreach(Container container in containers)
+            //{
+            //    Console.WriteLine($"{container.Name} {container.Id} {container.Capacity}");
+            //}
 
-            TestException();
+            ////Test();
+
+            //TestException();
 
 
             Console.WriteLine("Done");
-            Console.ReadKey();            
+            Console.ReadKey();
+        }
+
+        public static async void TestDeserealization()
+        {
+            GalacentreHttpClient client = new GalacentreHttpClient(new HttpClient(),
+                new GalacentreApiKey(""));
+
+            GalacentreResponse result = await client.GetAsync<string>("&store=msk&select=props,specifications,name");
+                  
+            foreach(GalacentreDataObject data in result.Data)
+            {
+                Console.WriteLine(data);
+            }
         }
 
         public async static void Fill()
