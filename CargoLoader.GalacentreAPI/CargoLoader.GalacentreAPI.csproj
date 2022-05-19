@@ -7,15 +7,12 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Services\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\cargoLoader.Domain\CargoLoader.Domain.csproj" />
+    <ProjectReference Include="..\CargoLoader.EntityFraemwork\CargoLoader.EntityFraemwork.csproj" />
   </ItemGroup>
 
 </Project>

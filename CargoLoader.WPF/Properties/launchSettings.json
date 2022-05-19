@@ -1,0 +1,10 @@
+{
+  "profiles": {
+    "CargoLoader.WPF": {
+      "commandName": "Project",
+      "environmentVariables": {
+        "GALACENTRE_API_KEY": "b531a3692581befc83fff730c973db31"
+      }
+    }
+  }
+}

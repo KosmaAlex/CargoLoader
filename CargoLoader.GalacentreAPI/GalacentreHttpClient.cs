@@ -19,7 +19,6 @@ namespace CargoLoader.GalacentreAPI
         public GalacentreHttpClient(HttpClient httpClient, GalacentreApiKey apiKey)
         {
             _httpClient = httpClient;
-            _httpClient.BaseAddress = new Uri("http://www.galacentre.ru/api/v2/catalog/json/");
             _apiKey = apiKey.Key;
         }
 

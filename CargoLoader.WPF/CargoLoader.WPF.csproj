@@ -9,11 +9,19 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.Extensions.Hosting" Version="6.0.1" />
+    <PackageReference Include="Microsoft.Extensions.Http" Version="6.0.0" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\cargoLoader.Domain\CargoLoader.Domain.csproj" />
     <ProjectReference Include="..\CargoLoader.EntityFraemwork\CargoLoader.EntityFraemwork.csproj" />
+    <ProjectReference Include="..\CargoLoader.GalacentreAPI\CargoLoader.GalacentreAPI.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="appsettings.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
 </Project>

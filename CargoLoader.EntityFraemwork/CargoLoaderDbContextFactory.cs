@@ -8,35 +8,20 @@ using System.Threading.Tasks;
 namespace CargoLoader.EntityFraemwork
 {
     public class CargoLoaderDbContextFactory
-    {
-        //private readonly Action<DbContextOptionsBuilder> _configureDbContext;
-
-        //public CargoLoaderDbContextFactory(Action<DbContextOptionsBuilder> configureDbContext)
-        //{
-        //    _configureDbContext = o => o.UseSqlServer("Server=(localdb)\\mssqllocaldb;Database=CargoLoader;Trusted_Connection=True;");
-        //    //_configureDbContext = configureDbContext;
-        //}
-
-        //public CargoLoaderDbContext CreateContext()
-        //{
-        //    DbContextOptionsBuilder<CargoLoaderDbContext> options = new DbContextOptionsBuilder<CargoLoaderDbContext>();
-
-        //    _configureDbContext(options);
-
-        //    return new CargoLoaderDbContext(options.Options);
-        //}
-
-        private readonly DbContextOptions _options; 
-        public CargoLoaderDbContextFactory()
+    {        
+        private readonly string _connectionString;
+        public CargoLoaderDbContextFactory(string connectionString)
         {
-            DbContextOptionsBuilder builder = new DbContextOptionsBuilder();
-            builder.UseSqlServer("Server=(localdb)\\mssqllocaldb;Database=CargoLoader;Trusted_Connection=True;");
-            _options = builder.Options;
+            _connectionString = connectionString;
         }
 
         public CargoLoaderDbContext CreateContext()
         {
-            return new CargoLoaderDbContext(_options);
+            //TODO: find a difference between generic and non-generic optionsBuilder 
+            DbContextOptionsBuilder builder = new DbContextOptionsBuilder();
+            builder.UseSqlServer(_connectionString);
+
+            return new CargoLoaderDbContext(builder.Options);
         }
 
     }
