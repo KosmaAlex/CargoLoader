@@ -4,8 +4,10 @@ using CargoLoader.EntityFraemwork;
 using CargoLoader.EntityFraemwork.Services;
 using CargoLoader.GalacentreAPI;
 using CargoLoader.GalacentreAPI.Models;
+using CargoLoader.GalacentreAPI.Services;
 using CargoLoader.WPF.Navigators;
 using CargoLoader.WPF.ViewModels;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -48,9 +50,10 @@ namespace CargoLoader.WPF
                     {
                         c.BaseAddress = new Uri("http://www.galacentre.ru/api/v2/catalog/json/");
                     });
-
+                                
 
                     string connectionString = context.Configuration.GetConnectionString("mssqllocal");
+                    services.AddDbContext<CargoLoaderDbContext>(o => o.UseSqlServer("Server=(localdb)\\mssqllocaldb;Database=CargoLoader;Trusted_Connection=True;"));
                     services.AddSingleton<CargoLoaderDbContextFactory>(new CargoLoaderDbContextFactory(connectionString));
 
 
@@ -71,6 +74,9 @@ namespace CargoLoader.WPF
 
                     services.AddSingleton<MainViewModel>();
 
+                    //TODO: think about interface or not
+                    services.AddSingleton<GalacentreMappingService>();
+
                     services.AddScoped<MainWindow>(s => new MainWindow(s.GetRequiredService<MainViewModel>()));
                 });
         }
@@ -89,6 +95,8 @@ namespace CargoLoader.WPF
 
             Window window = _host.Services.GetRequiredService<MainWindow>();
             window.Show();
+
+            base.OnStartup(e);
         }
 
         protected override async void OnExit(ExitEventArgs e)

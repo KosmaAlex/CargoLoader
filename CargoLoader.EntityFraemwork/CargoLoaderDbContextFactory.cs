@@ -17,8 +17,7 @@ namespace CargoLoader.EntityFraemwork
 
         public CargoLoaderDbContext CreateContext()
         {
-            //TODO: find a difference between generic and non-generic optionsBuilder 
-            DbContextOptionsBuilder builder = new DbContextOptionsBuilder();
+            DbContextOptionsBuilder<CargoLoaderDbContext> builder = new DbContextOptionsBuilder<CargoLoaderDbContext>();
             builder.UseSqlServer(_connectionString);
 
             return new CargoLoaderDbContext(builder.Options);

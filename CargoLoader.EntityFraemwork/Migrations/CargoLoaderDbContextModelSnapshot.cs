@@ -82,7 +82,7 @@ namespace CargoLoader.EntityFraemwork.Migrations
 
                     b.HasIndex("OrderId");
 
-                    b.ToTable("Cargo");
+                    b.ToTable("Cargo", (string)null);
                 });
 
             modelBuilder.Entity("CargoLoader.Domain.Models.Container", b =>
@@ -138,7 +138,7 @@ namespace CargoLoader.EntityFraemwork.Migrations
                     b.HasIndex("Marking")
                         .IsUnique();
 
-                    b.ToTable("Containers");
+                    b.ToTable("Containers", (string)null);
                 });
 
             modelBuilder.Entity("CargoLoader.Domain.Models.Order", b =>
@@ -161,7 +161,7 @@ namespace CargoLoader.EntityFraemwork.Migrations
                     b.HasIndex("OrderNumber")
                         .IsUnique();
 
-                    b.ToTable("Orders");
+                    b.ToTable("Orders", (string)null);
                 });
 
             modelBuilder.Entity("CargoLoader.Domain.Models.Product", b =>
@@ -214,7 +214,7 @@ namespace CargoLoader.EntityFraemwork.Migrations
                     b.HasIndex("Marking")
                         .IsUnique();
 
-                    b.ToTable("Products");
+                    b.ToTable("Products", (string)null);
                 });
 
             modelBuilder.Entity("CargoLoader.Domain.Models.Transport", b =>
@@ -241,7 +241,7 @@ namespace CargoLoader.EntityFraemwork.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Transports");
+                    b.ToTable("Transports", (string)null);
                 });
 
             modelBuilder.Entity("CargoLoader.Domain.Models.Cargo", b =>

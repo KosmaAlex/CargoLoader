@@ -10,13 +10,13 @@ namespace CargoLoader.WPF.Navigators
 {
     public class ListingNavigator : IListingNavigator
     {
-        private IListingPageViewModel _listingNavigator;
+        private IListingPageViewModel _currentListing;
         public IListingPageViewModel CurrentListing
         {
-            get { return _listingNavigator; }
+            get { return _currentListing; }
             set
             {
-                _listingNavigator = value;
+                _currentListing = value;
                 StateChanged.Invoke();
             }
         }

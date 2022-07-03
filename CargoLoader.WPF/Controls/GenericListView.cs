@@ -1,5 +1,6 @@
 ﻿using CargoLoader.WPF.ViewModels;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
@@ -15,25 +16,21 @@ namespace CargoLoader.WPF.Controls
 {
     public class GenericListView : ListView
     {
-        
-        protected override void OnPropertyChanged(DependencyPropertyChangedEventArgs e)
-        {
-            base.OnPropertyChanged(e);
+        private readonly IListingPageViewModel _listingPage;
 
-            if (e.Property.Name == "ItemsSource"
-                && e.OldValue != e.NewValue
-                && e.NewValue != null)
-            {
-                CreateColumn(this);
-            }
+        public GenericListView(IListingPageViewModel listingPage)
+        {
+            _listingPage = listingPage;
+            CreateColumn(this);
         }
 
-        private static void CreateColumn(GenericListView genericListView)
+        
+        private void CreateColumn(GenericListView genericListView)
         {
-            GridView gridView = new GridView { AllowsColumnReorder =true};
+            GridView gridView = new GridView { AllowsColumnReorder = true};            
 
-            PropertyInfo[] properties = genericListView.ItemsSource.GetType().GetGenericArguments()[0].GetProperties();
-
+            PropertyInfo[] properties = _listingPage.GetType().GetGenericArguments()[0].GetProperties();
+                       
             foreach(PropertyInfo property in properties)
             {
                 BrowsableAttribute attributes = (BrowsableAttribute)property.GetCustomAttributes(true)
@@ -44,8 +41,32 @@ namespace CargoLoader.WPF.Controls
                     continue;
                 }
 
-                Binding binding = new Binding { Path = new PropertyPath(property.Name), Mode = BindingMode.OneWay };                
-                GridViewColumn gridViewColumn = new GridViewColumn() { Header = property.Name, DisplayMemberBinding = binding };
+
+                Binding binding;
+
+                if (property.PropertyType == typeof(double) ||
+                    property.PropertyType == typeof(Nullable<double>))
+                {
+                    binding = new Binding
+                    {
+                        Path = new PropertyPath(property.Name),
+                        Mode = BindingMode.OneWay,
+                        StringFormat = "{0:##0.##}"
+                    };
+                }
+                else
+                {
+                    binding = new Binding
+                    {
+                        Path = new PropertyPath(property.Name),
+                        Mode = BindingMode.OneWay
+                    };
+                }
+
+                             
+                GridViewColumn gridViewColumn = new GridViewColumn() { Header = property.Name,
+                    DisplayMemberBinding = binding };
+                
                 gridView.Columns.Add(gridViewColumn);
             }
             genericListView.View = gridView;

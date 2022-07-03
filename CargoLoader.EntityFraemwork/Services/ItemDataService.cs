@@ -13,13 +13,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace CargoLoader.EntityFraemwork.Services
-{
-    /// <summary>
-    /// Known bugs:
-    /// 0 problem: if parse 0 as second parameter it wont search entity from 0 to parameter.
-    /// because 0 is a default for double.
-    /// </summary>
-    /// <typeparam name="T"></typeparam>
+{    
     public class ItemDataService<T> : IItemDataService<T> where T : DomainObject, IItem
     {
         private readonly CargoLoaderDbContextFactory _contextFactory;
@@ -54,9 +48,9 @@ namespace CargoLoader.EntityFraemwork.Services
         }
 
         public async Task<IEnumerable<T>> GetByCustomProperty(string propertyName,
-            double parameter, double minParameter = default)
+            double parameter, double minParameter = Constants.DefaultMinValue)
         {
-            if(minParameter == default)
+            if(minParameter == Constants.DefaultMinValue)
             {
                 minParameter = parameter;
             }
@@ -93,9 +87,9 @@ namespace CargoLoader.EntityFraemwork.Services
             }
         }
 
-        public async Task<IEnumerable<T>> GetByHeight(double height, double minHeight = default)
+        public async Task<IEnumerable<T>> GetByHeight(double height, double minHeight = Constants.DefaultMinValue)
         {
-            if(minHeight == default)
+            if(minHeight == Constants.DefaultMinValue)
             {
                 minHeight = height;
             }
@@ -183,9 +177,9 @@ namespace CargoLoader.EntityFraemwork.Services
             }
         }
 
-        public async Task<IEnumerable<T>> GetByLength(double length, double minLength = default)
+        public async Task<IEnumerable<T>> GetByLength(double length, double minLength = Constants.DefaultMinValue)
         {
-            if(minLength == default)
+            if(minLength == Constants.DefaultMinValue)
             {
                 minLength = length;
             }
@@ -238,11 +232,11 @@ namespace CargoLoader.EntityFraemwork.Services
             }
         }
 
-        public async Task<IEnumerable<T>> GetByVolume(double volume, double minVolume = default)
+        public async Task<IEnumerable<T>> GetByVolume(double volume, double minVolume = Constants.DefaultMinValue)
         {
             using (CargoLoaderDbContext context = _contextFactory.CreateContext())
             {
-                if(minVolume == default)
+                if(minVolume == Constants.DefaultMinValue)
                 {
                     minVolume = volume;
                 }
@@ -260,12 +254,12 @@ namespace CargoLoader.EntityFraemwork.Services
             }
         }
 
-        public async Task<IEnumerable<T>> GetByWeight(double weight, double minWeight = default)
+        public async Task<IEnumerable<T>> GetByWeight(double weight, double minWeight = Constants.DefaultMinValue)
         {
             using (CargoLoaderDbContext context = _contextFactory.CreateContext())
             {
                 
-                if(minWeight == default)
+                if(minWeight == Constants.DefaultMinValue)
                 {
                     minWeight = weight;
                 }
@@ -283,9 +277,9 @@ namespace CargoLoader.EntityFraemwork.Services
             }
         }
 
-        public async Task<IEnumerable<T>> GetByWidth(double width, double minWidth = default)
+        public async Task<IEnumerable<T>> GetByWidth(double width, double minWidth = Constants.DefaultMinValue)
         {
-            if(minWidth == default)
+            if(minWidth == Constants.DefaultMinValue)
             {
                 minWidth = width;
             }
@@ -308,6 +302,27 @@ namespace CargoLoader.EntityFraemwork.Services
         public async Task<T> Update(int id, T entity)
         {
             return await _nonQueryDataService.Update(id, entity);
+        }
+
+        public async Task<int> GetTableCountAsync()
+        {
+            using(CargoLoaderDbContext context = _contextFactory.CreateContext())
+            {
+                int result = await context.Set<T>().CountAsync();
+                return result;
+            }
+        }
+        public async Task<IEnumerable<T>> GetPageAsync(int page, int pageSize)
+        {
+            using (CargoLoaderDbContext context = _contextFactory.CreateContext())
+            {
+                IEnumerable<T> result = await context.Set<T>()
+                    .Skip((page - 1) * pageSize)
+                    .Take(pageSize)
+                    .ToListAsync();
+
+                return result;
+            }
         }
     }
 }

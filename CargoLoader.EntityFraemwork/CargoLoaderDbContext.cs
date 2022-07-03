@@ -16,14 +16,7 @@ namespace CargoLoader.EntityFraemwork
         public DbSet<Order> Orders { get; set; }
         public DbSet<Transport> Transports { get; set; }
 
-        public CargoLoaderDbContext() { }
-        public CargoLoaderDbContext(DbContextOptions options) : base(options) { }
-
-
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        {            
-            base.OnConfiguring(optionsBuilder);
-        }
+        public CargoLoaderDbContext(DbContextOptions<CargoLoaderDbContext> options) : base(options) { }
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -35,9 +28,15 @@ namespace CargoLoader.EntityFraemwork
             modelBuilder.Entity<Container>().HasIndex(c => c.Marking).IsUnique();
             modelBuilder.Entity<Order>().HasIndex(o => o.OrderNumber).IsUnique();
 
-            modelBuilder.Entity<Product>().Property(p => p.Volume).HasComputedColumnSql("Length * Height * Width");
-            modelBuilder.Entity<Container>().Property(c => c.Volume).HasComputedColumnSql("Length * Height * Width");
-            modelBuilder.Entity<Cargo>().Property(c => c.Volume).HasComputedColumnSql("Length * Height * Width");
+
+            //TODO: change type from double to decimal. migrate new calculation
+            modelBuilder.Entity<Product>().Property(p => p.Volume).HasComputedColumnSql(Constants.VolumeColumnCalc);
+            modelBuilder.Entity<Container>().Property(c => c.Volume).HasComputedColumnSql(Constants.VolumeColumnCalc);
+            modelBuilder.Entity<Cargo>().Property(c => c.Volume).HasComputedColumnSql(Constants.VolumeColumnCalc);
+
+            
+
+            base.OnModelCreating(modelBuilder);
         }
     }
 }

@@ -78,7 +78,8 @@ namespace CargoLoader.EntityFraemwork.Services
             }
         }
 
-        public async Task<IEnumerable<Cargo>> GetByCustomProperty(string propertyName, double parameter, double minParameter = 0)
+        public async Task<IEnumerable<Cargo>> GetByCustomProperty(string propertyName,
+            double parameter, double minParameter = Constants.DefaultMinValue)
         {
             return await _itemDataService.GetByCustomProperty(propertyName, parameter, minParameter);
         }
@@ -88,7 +89,7 @@ namespace CargoLoader.EntityFraemwork.Services
             return await _itemDataService.GetByCustomProperty(propertyName, parameter);
         }
 
-        public async Task<IEnumerable<Cargo>> GetByHeight(double maxHeight, double minHeight = 0)
+        public async Task<IEnumerable<Cargo>> GetByHeight(double maxHeight, double minHeight = Constants.DefaultMinValue)
         {
             return await _itemDataService.GetByHeight(maxHeight, minHeight);
         }
@@ -113,7 +114,7 @@ namespace CargoLoader.EntityFraemwork.Services
             return await _itemDataService.GetByIsRotatable(isRotatable);
         }
 
-        public async Task<IEnumerable<Cargo>> GetByLength(double maxLength, double minLength = 0)
+        public async Task<IEnumerable<Cargo>> GetByLength(double maxLength, double minLength = Constants.DefaultMinValue)
         {
             return await _itemDataService.GetByLength(maxLength, minLength);
         }
@@ -145,19 +146,29 @@ namespace CargoLoader.EntityFraemwork.Services
             }
         }
 
-        public async Task<IEnumerable<Cargo>> GetByVolume(double volume, double minVolume = 0)
+        public async Task<IEnumerable<Cargo>> GetByVolume(double volume, double minVolume = Constants.DefaultMinValue)
         {
             return await _itemDataService.GetByVolume(volume, minVolume);
         }
 
-        public async Task<IEnumerable<Cargo>> GetByWeight(double weight, double minWeight = 0)
+        public async Task<IEnumerable<Cargo>> GetByWeight(double weight, double minWeight = Constants.DefaultMinValue)
         {
             return await _itemDataService.GetByWeight(weight, minWeight);
         }
 
-        public async Task<IEnumerable<Cargo>> GetByWidth(double maxWidth, double minWidth = 0)
+        public async Task<IEnumerable<Cargo>> GetByWidth(double maxWidth, double minWidth = Constants.DefaultMinValue)
         {
             return await _itemDataService.GetByWidth(maxWidth, minWidth);
+        }
+
+        public Task<IEnumerable<Cargo>> GetPageAsync(int page, int pageSize)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<int> GetTableCountAsync()
+        {
+            throw new NotImplementedException();
         }
 
         public async Task<Cargo> Update(int id, Cargo entity)

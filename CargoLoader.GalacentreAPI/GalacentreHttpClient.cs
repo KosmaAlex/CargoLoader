@@ -22,13 +22,15 @@ namespace CargoLoader.GalacentreAPI
             _apiKey = apiKey.Key;
         }
 
-        public async Task<GalacentreResponse> GetAsync<T>(string uri)
+        public async Task<GalacentreResponse> GetAsync()
         {
-            HttpResponseMessage response = await _httpClient.GetAsync($"?key={_apiKey}{uri}");
+            HttpResponseMessage response = await _httpClient
+                .GetAsync($"?key={_apiKey}&store=msk&select=props,specifications,name");
 
             if (!response.IsSuccessStatusCode)
             {
-                throw new InvalidHttpResponseException($"{_httpClient.BaseAddress}?key={_apiKey}{uri}");
+                throw new InvalidHttpResponseException
+                    ($"{_httpClient.BaseAddress}?key={_apiKey}&store=msk&select=props,specifications,name");
             }
 
             string jsonResponse = await response.Content.ReadAsStringAsync();

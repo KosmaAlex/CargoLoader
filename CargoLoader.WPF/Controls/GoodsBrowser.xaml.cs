@@ -24,5 +24,7 @@ namespace CargoLoader.WPF.Controls
         {
             InitializeComponent();
         }
+
+        
     }
 }

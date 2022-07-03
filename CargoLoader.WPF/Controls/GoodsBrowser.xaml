@@ -8,7 +8,8 @@
              xmlns:converters="clr-namespace:CargoLoader.WPF.Converters"
              xmlns:nav="clr-namespace:CargoLoader.WPF.Navigators"
              mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800">
+             d:DesignHeight="450" d:DesignWidth="800"
+             Name="GoodsBrow">
     <UserControl.Resources>
         <converters:EqualValueToParameterConverter x:Key="EqualValueToParameterConverter"/>
     </UserControl.Resources>
@@ -18,15 +19,17 @@
             <RowDefinition Height="auto"/>
             <RowDefinition Height="auto"/>
             <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
         </Grid.RowDefinitions>
 
         <Button Grid.Row="0"
                 Height="auto" Width="auto"
-                Content="Refresh"
+                Content="GetDataToDb"
                 HorizontalAlignment="Right"
-                Margin="10"/>
+                Margin="10"
+                Command="{Binding GetDataToDbCommand}"/>
 
-        <Grid Grid.Row="1">
+        <Grid Grid.Row="1" Margin="5, 0, 0, 0">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="auto"/>
                 <ColumnDefinition Width="auto"/>
@@ -52,7 +55,59 @@
                          CommandParameter="{x:Static nav:ListingType.Container}"/>
         </Grid>
 
-        <local:ItemsListing Grid.Row="2"/>
+        
+        
+        <ContentControl Grid.Row="2"
+                        Height="500"
+                        Width="1000"
+                        Margin="5, 0, 0, 0"
+                        HorizontalAlignment="Left"
+                        ScrollViewer.VerticalScrollBarVisibility="Auto"
+                        Content="{Binding CurrentListing.GenericListView}"/>
+            
+        
+        <StackPanel Grid.Row="3" Orientation="Horizontal" Margin="5, 2, 0, 0">
+            <StackPanel.Style>
+                <Style TargetType="StackPanel">
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding CurrentListing}" 
+                                     Value="{x:Null}">
+                            <Setter Property="Visibility" Value="Collapsed"/>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </StackPanel.Style>
+            
+            <Button Margin="0, 0, 10, 0"
+                    FontSize="20"
+                    Width="100"
+                    Content="Prev" 
+                    Command="{Binding CurrentListing.PreviousPageCommand}"/>
 
+            <TextBox x:Name="PageBox"
+                     FontSize="20"
+                     Width="50"
+                     HorizontalContentAlignment="Right"
+                     Text="{Binding CurrentListing.Page, Mode=OneWay}">
+                
+                <TextBox.InputBindings>
+                    <KeyBinding 
+                        Command="{Binding CurrentListing.SpecifiedPageCommand}"
+                        CommandParameter="{Binding Text, ElementName=PageBox}"
+                        Key="Enter"/>
+                </TextBox.InputBindings>
+            </TextBox>
+
+            <TextBlock Text="/" FontSize="20" Margin="3, 0"/>
+
+            <TextBlock FontSize="20"
+                       Text="{Binding CurrentListing.PagesCount}"/>
+
+            <Button Margin="10, 0, 0, 0"
+                    FontSize="20"
+                    Width="100"
+                    Content="Next"
+                    Command="{Binding CurrentListing.NextPageCommand}"/>
+        </StackPanel>
     </Grid>
 </UserControl>
