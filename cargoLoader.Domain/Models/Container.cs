@@ -11,16 +11,16 @@ namespace CargoLoader.Domain.Models
     {
         public string Marking { get; set; }
         public string Name { get; set; }
-        public double Width { get; set; }
-        public double Height { get; set; }
-        public double Length { get; set; }
-        public double? Volume { get; set; }
-        public double Weight { get; set; }
+        public decimal Width { get; set; }
+        public decimal Height { get; set; }
+        public decimal Length { get; set; }
+        public decimal? Volume { get; set; }
+        public decimal Weight { get; set; }
         public bool IsFragile { get; set; }
         public bool IsRotatable { get; set; }
         public bool IsProp { get; set; }
         public bool IsContainer { get; set; } = true;
-        public double? Capacity { get; set; }
+        public decimal? Capacity { get; set; }
 
     }
 }

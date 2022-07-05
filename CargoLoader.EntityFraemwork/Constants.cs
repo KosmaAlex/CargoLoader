@@ -8,7 +8,7 @@ namespace CargoLoader.EntityFraemwork
 {
     public static class Constants
     {
-        public const double DefaultMinValue = -1;
-        public const string VolumeColumnCalc = "(Length * Height * Width)/ 1000000";
+        public const decimal DefaultMinValue = -1;
+        public const string VolumeColumnCalc = "Length * Height * Width";
     }
 }

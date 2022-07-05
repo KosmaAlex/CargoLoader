@@ -42,28 +42,13 @@ namespace CargoLoader.WPF.Controls
                 }
 
 
-                Binding binding;
-
-                if (property.PropertyType == typeof(double) ||
-                    property.PropertyType == typeof(Nullable<double>))
+                Binding binding = new Binding
                 {
-                    binding = new Binding
-                    {
-                        Path = new PropertyPath(property.Name),
-                        Mode = BindingMode.OneWay,
-                        StringFormat = "{0:##0.##}"
-                    };
-                }
-                else
-                {
-                    binding = new Binding
-                    {
-                        Path = new PropertyPath(property.Name),
-                        Mode = BindingMode.OneWay
-                    };
-                }
+                    Path = new PropertyPath(property.Name),
+                    Mode = BindingMode.OneWay
+                }; 
 
-                             
+                                             
                 GridViewColumn gridViewColumn = new GridViewColumn() { Header = property.Name,
                     DisplayMemberBinding = binding };
                 

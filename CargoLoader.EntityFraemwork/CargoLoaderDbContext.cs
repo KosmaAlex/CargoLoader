@@ -28,13 +28,10 @@ namespace CargoLoader.EntityFraemwork
             modelBuilder.Entity<Container>().HasIndex(c => c.Marking).IsUnique();
             modelBuilder.Entity<Order>().HasIndex(o => o.OrderNumber).IsUnique();
 
+            modelBuilder.Entity<Product>().Property(p => p.Weight).HasPrecision(18, 3);
+            modelBuilder.Entity<Container>().Property(p => p.Weight).HasPrecision(18, 3);
+            modelBuilder.Entity<Cargo>().Property(p => p.Weight).HasPrecision(18, 3);
 
-            //TODO: change type from double to decimal. migrate new calculation
-            modelBuilder.Entity<Product>().Property(p => p.Volume).HasComputedColumnSql(Constants.VolumeColumnCalc);
-            modelBuilder.Entity<Container>().Property(c => c.Volume).HasComputedColumnSql(Constants.VolumeColumnCalc);
-            modelBuilder.Entity<Cargo>().Property(c => c.Volume).HasComputedColumnSql(Constants.VolumeColumnCalc);
-
-            
 
             base.OnModelCreating(modelBuilder);
         }

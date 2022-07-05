@@ -4,6 +4,7 @@ using CargoLoader.EntityFraemwork;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CargoLoader.EntityFraemwork.Migrations
 {
     [DbContext(typeof(CargoLoaderDbContext))]
-    partial class CargoLoaderDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220705131119_dimensions_to_decimal")]
+    partial class dimensions_to_decimal
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -30,8 +32,8 @@ namespace CargoLoader.EntityFraemwork.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
-                    b.Property<decimal?>("Capacity")
-                        .HasColumnType("decimal(18,2)");
+                    b.Property<double?>("Capacity")
+                        .HasColumnType("float");
 
                     b.Property<int?>("ContainerId")
                         .HasColumnType("int");
@@ -65,12 +67,11 @@ namespace CargoLoader.EntityFraemwork.Migrations
                     b.Property<int>("OrderId")
                         .HasColumnType("int");
 
-                    b.Property<decimal?>("Volume")
-                        .HasColumnType("decimal(18,2)");
+                    b.Property<double?>("Volume")
+                        .HasColumnType("float");
 
-                    b.Property<decimal>("Weight")
-                        .HasPrecision(18, 3)
-                        .HasColumnType("decimal(18,3)");
+                    b.Property<double>("Weight")
+                        .HasColumnType("float");
 
                     b.Property<decimal>("Width")
                         .HasColumnType("decimal(18,2)");
@@ -81,7 +82,7 @@ namespace CargoLoader.EntityFraemwork.Migrations
 
                     b.HasIndex("OrderId");
 
-                    b.ToTable("Cargo", (string)null);
+                    b.ToTable("Cargo");
                 });
 
             modelBuilder.Entity("CargoLoader.Domain.Models.Container", b =>
@@ -92,8 +93,8 @@ namespace CargoLoader.EntityFraemwork.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
-                    b.Property<decimal?>("Capacity")
-                        .HasColumnType("decimal(18,2)");
+                    b.Property<double?>("Capacity")
+                        .HasColumnType("float");
 
                     b.Property<decimal>("Height")
                         .HasColumnType("decimal(18,2)");
@@ -121,12 +122,11 @@ namespace CargoLoader.EntityFraemwork.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<decimal?>("Volume")
-                        .HasColumnType("decimal(18,2)");
+                    b.Property<double?>("Volume")
+                        .HasColumnType("float");
 
-                    b.Property<decimal>("Weight")
-                        .HasPrecision(18, 3)
-                        .HasColumnType("decimal(18,3)");
+                    b.Property<double>("Weight")
+                        .HasColumnType("float");
 
                     b.Property<decimal>("Width")
                         .HasColumnType("decimal(18,2)");
@@ -136,7 +136,7 @@ namespace CargoLoader.EntityFraemwork.Migrations
                     b.HasIndex("Marking")
                         .IsUnique();
 
-                    b.ToTable("Containers", (string)null);
+                    b.ToTable("Containers");
                 });
 
             modelBuilder.Entity("CargoLoader.Domain.Models.Order", b =>
@@ -159,7 +159,7 @@ namespace CargoLoader.EntityFraemwork.Migrations
                     b.HasIndex("OrderNumber")
                         .IsUnique();
 
-                    b.ToTable("Orders", (string)null);
+                    b.ToTable("Orders");
                 });
 
             modelBuilder.Entity("CargoLoader.Domain.Models.Product", b =>
@@ -196,12 +196,11 @@ namespace CargoLoader.EntityFraemwork.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<decimal?>("Volume")
-                        .HasColumnType("decimal(18,2)");
+                    b.Property<double?>("Volume")
+                        .HasColumnType("float");
 
-                    b.Property<decimal>("Weight")
-                        .HasPrecision(18, 3)
-                        .HasColumnType("decimal(18,3)");
+                    b.Property<double>("Weight")
+                        .HasColumnType("float");
 
                     b.Property<decimal>("Width")
                         .HasColumnType("decimal(18,2)");
@@ -211,7 +210,7 @@ namespace CargoLoader.EntityFraemwork.Migrations
                     b.HasIndex("Marking")
                         .IsUnique();
 
-                    b.ToTable("Products", (string)null);
+                    b.ToTable("Products");
                 });
 
             modelBuilder.Entity("CargoLoader.Domain.Models.Transport", b =>
@@ -238,7 +237,7 @@ namespace CargoLoader.EntityFraemwork.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Transports", (string)null);
+                    b.ToTable("Transports");
                 });
 
             modelBuilder.Entity("CargoLoader.Domain.Models.Cargo", b =>

@@ -11,16 +11,16 @@ namespace CargoLoader.Domain.Services
     {
         Task<T> GetByMarking(string marking);
         Task<IEnumerable<T>> GetByName(string name);
-        Task<IEnumerable<T>> GetByLength(double maxLength, double minLength);
-        Task<IEnumerable<T>> GetByWidth(double maxWidth, double minWidth);
-        Task<IEnumerable<T>> GetByHeight(double maxHeight, double minHeight);
-        Task<IEnumerable<T>> GetByVolume(double volume, double minVolume);
-        Task<IEnumerable<T>> GetByWeight (double weight, double minWeight);
+        Task<IEnumerable<T>> GetByLength(decimal maxLength, decimal minLength);
+        Task<IEnumerable<T>> GetByWidth(decimal maxWidth, decimal minWidth);
+        Task<IEnumerable<T>> GetByHeight(decimal maxHeight, decimal minHeight);
+        Task<IEnumerable<T>> GetByVolume(decimal volume, decimal minVolume);
+        Task<IEnumerable<T>> GetByWeight (decimal weight, decimal minWeight);
         Task<IEnumerable<T>> GetByIsFragile(bool isFragile);
         Task<IEnumerable<T>> GetByIsRotatable(bool isRotatable);
         Task<IEnumerable<T>> GetByIsProp(bool isProp);
         Task<IEnumerable<T>> GetByIsContainer(bool isContainer);
-        Task<IEnumerable<T>> GetByCustomProperty(string propertyName, double parameter, double minParameter);
+        Task<IEnumerable<T>> GetByCustomProperty(string propertyName, decimal parameter, decimal minParameter);
         Task<IEnumerable<T>> GetByCustomProperty(string propertyName, bool parameter);
         Task<int> GetTableCountAsync();
         Task<IEnumerable<T>> GetPageAsync(int page, int pageSize);

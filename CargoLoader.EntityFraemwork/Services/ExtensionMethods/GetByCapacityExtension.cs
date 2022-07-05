@@ -12,7 +12,7 @@ namespace CargoLoader.EntityFraemwork.Services.ExtensionMethods
     public static class GetByCapacityExtension
     {
         public static async Task<IEnumerable<T>> GetByCapacityAsync<T>(this IItemDataService<T> dataService,
-            double capacity, double minCapacity = Constants.DefaultMinValue)
+            decimal capacity, decimal minCapacity = Constants.DefaultMinValue)
         {
             string propertyName = "Capacity";
 

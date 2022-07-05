@@ -10,19 +10,23 @@ namespace CargoLoader.Domain.Exceptions
     public class InvalidHttpResponseException : Exception
     {
         public string Uri { get; set; }
-        public InvalidHttpResponseException(string uri)
+        public string StatusCode { get; set; }
+        public InvalidHttpResponseException(string uri, string statusCode)
         {
             Uri = uri;
+            StatusCode = statusCode;
         }
 
-        public InvalidHttpResponseException(string uri, string? message) : base(message)
+        public InvalidHttpResponseException(string uri, string statusCode, string? message) : base(message)
         {
             Uri = uri;
+            StatusCode = statusCode;
         }
 
-        public InvalidHttpResponseException(string uri, string? message, Exception? innerException) : base(message, innerException)
+        public InvalidHttpResponseException(string uri, string statusCode, string? message, Exception? innerException) : base(message, innerException)
         {
             Uri = uri;
+            StatusCode = statusCode;
         }
     }
 }

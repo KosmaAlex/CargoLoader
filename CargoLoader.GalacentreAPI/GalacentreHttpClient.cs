@@ -30,7 +30,8 @@ namespace CargoLoader.GalacentreAPI
             if (!response.IsSuccessStatusCode)
             {
                 throw new InvalidHttpResponseException
-                    ($"{_httpClient.BaseAddress}?key={_apiKey}&store=msk&select=props,specifications,name");
+                    ($"{_httpClient.BaseAddress}?key={_apiKey}&store=msk&select=props,specifications,name",
+                    response.StatusCode.ToString());
             }
 
             string jsonResponse = await response.Content.ReadAsStringAsync();

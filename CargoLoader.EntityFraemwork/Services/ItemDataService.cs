@@ -48,7 +48,7 @@ namespace CargoLoader.EntityFraemwork.Services
         }
 
         public async Task<IEnumerable<T>> GetByCustomProperty(string propertyName,
-            double parameter, double minParameter = Constants.DefaultMinValue)
+            decimal parameter, decimal minParameter = Constants.DefaultMinValue)
         {
             if(minParameter == Constants.DefaultMinValue)
             {
@@ -87,7 +87,7 @@ namespace CargoLoader.EntityFraemwork.Services
             }
         }
 
-        public async Task<IEnumerable<T>> GetByHeight(double height, double minHeight = Constants.DefaultMinValue)
+        public async Task<IEnumerable<T>> GetByHeight(decimal height, decimal minHeight = Constants.DefaultMinValue)
         {
             if(minHeight == Constants.DefaultMinValue)
             {
@@ -177,9 +177,9 @@ namespace CargoLoader.EntityFraemwork.Services
             }
         }
 
-        public async Task<IEnumerable<T>> GetByLength(double length, double minLength = Constants.DefaultMinValue)
+        public async Task<IEnumerable<T>> GetByLength(decimal length, decimal minLength = (decimal)Constants.DefaultMinValue)
         {
-            if(minLength == Constants.DefaultMinValue)
+            if(minLength == (decimal)Constants.DefaultMinValue)
             {
                 minLength = length;
             }
@@ -232,7 +232,7 @@ namespace CargoLoader.EntityFraemwork.Services
             }
         }
 
-        public async Task<IEnumerable<T>> GetByVolume(double volume, double minVolume = Constants.DefaultMinValue)
+        public async Task<IEnumerable<T>> GetByVolume(decimal volume, decimal minVolume = Constants.DefaultMinValue)
         {
             using (CargoLoaderDbContext context = _contextFactory.CreateContext())
             {
@@ -254,7 +254,7 @@ namespace CargoLoader.EntityFraemwork.Services
             }
         }
 
-        public async Task<IEnumerable<T>> GetByWeight(double weight, double minWeight = Constants.DefaultMinValue)
+        public async Task<IEnumerable<T>> GetByWeight(decimal weight, decimal minWeight = Constants.DefaultMinValue)
         {
             using (CargoLoaderDbContext context = _contextFactory.CreateContext())
             {
@@ -277,7 +277,7 @@ namespace CargoLoader.EntityFraemwork.Services
             }
         }
 
-        public async Task<IEnumerable<T>> GetByWidth(double width, double minWidth = Constants.DefaultMinValue)
+        public async Task<IEnumerable<T>> GetByWidth(decimal width, decimal minWidth = Constants.DefaultMinValue)
         {
             if(minWidth == Constants.DefaultMinValue)
             {

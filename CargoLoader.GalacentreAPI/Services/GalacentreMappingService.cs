@@ -72,8 +72,8 @@ namespace CargoLoader.GalacentreAPI.Services
 
         private Product Mapping(GalacentreDataObject dataObject)
         {
-            double[] dimensions = DimensionsResolve(dataObject, out bool dimensionResolve);
-            double weight = WeightResolve(dataObject, out bool weightResolve);
+            decimal[] dimensions = DimensionsResolve(dataObject, out bool dimensionResolve);
+            decimal weight = WeightResolve(dataObject, out bool weightResolve);
             bool isFragile = FragileResolve(dataObject, out bool fragileResolve);
             bool isRotatable = RotateResolve(dataObject);
             bool isProp = PropResolve(dataObject, out bool propResolve);
@@ -89,6 +89,7 @@ namespace CargoLoader.GalacentreAPI.Services
                     Width = dimensions[1],
                     Height = dimensions[2],
                     Weight = weight,
+                    Volume = dimensions.Aggregate((a, b) => a * b),
                     IsFragile = isFragile,
                     IsRotatable = isRotatable,
                     IsProp = isProp
@@ -98,14 +99,14 @@ namespace CargoLoader.GalacentreAPI.Services
             return null;
         }
 
-        private double WeightResolve(GalacentreDataObject dataObject, out bool weightResolve)
+        private decimal WeightResolve(GalacentreDataObject dataObject, out bool weightResolve)
         {
             string temp = String.Format("{0:0.###}", dataObject.Specifications
                 .FirstOrDefault(s => s.Contains(Constants.SpecWeight))
                 .Replace(Constants.SpecWeight, String.Empty)
                 .Replace("кг", String.Empty));
 
-            weightResolve = double.TryParse(temp, out double result);
+            weightResolve = decimal.TryParse(temp, out decimal result);
 
             return result;
         }
@@ -155,15 +156,15 @@ namespace CargoLoader.GalacentreAPI.Services
             return rotateble;
         }
 
-        private double[] DimensionsResolve(GalacentreDataObject dataObject, out bool dimensionResolve)
+        private decimal[] DimensionsResolve(GalacentreDataObject dataObject, out bool dimensionResolve)
         {
             string[] dimensions = dataObject.Specifications
                 .FirstOrDefault(s => s.Contains(Constants.SpecDimensions))
                 .Replace(Constants.SpecDimensions, String.Empty)
                 .Replace("см", String.Empty)
-                .Split(new[] { 'x', 'х' });            
+                .Split(new[] { 'x', 'х' });
 
-            double[] result = new double[dimensions.Length];
+            decimal[] result = new decimal[dimensions.Length];
 
             if (dimensions.Length != 3)
             {
@@ -173,7 +174,7 @@ namespace CargoLoader.GalacentreAPI.Services
 
             for (int i = 0; i < dimensions.Length; i++)
             {
-                bool parseCheck = double.TryParse(dimensions[i], out double parseResult);
+                bool parseCheck = decimal.TryParse(dimensions[i], out decimal parseResult);
                 if (parseCheck)
                 {
                     result[i] = parseResult;
