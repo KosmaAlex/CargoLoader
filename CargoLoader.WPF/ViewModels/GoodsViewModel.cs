@@ -20,6 +20,7 @@ namespace CargoLoader.WPF.ViewModels
         private readonly IListingNavigator _listingNavigator;
 
         public IListingPageViewModel CurrentListing => _listingNavigator.CurrentListing;
+        public IFiltersViewModel CurrentFilters => _listingNavigator.CurrentFilters;
         public IList<IPageViewModel> Pages => _navigator.Pages;
         public ICommand UpdateCurrentListingCommand { get; }
         public ICommand GetDataToDbCommand { get; }
@@ -30,6 +31,7 @@ namespace CargoLoader.WPF.ViewModels
             _navigator = navigator;
             _listingNavigator = listingNavigator;
             _listingNavigator.StateChanged += ListingNavigator_StateChanged;
+            _listingNavigator.StateChanged += ListingFilters_StateChanged;
             GetDataToDbCommand = new GetDataToDbCommand(mappingService);
             UpdateCurrentListingCommand = new UpdateCurrentListingCommand(listingNavigator);
             Pages.Add(this);
@@ -38,6 +40,11 @@ namespace CargoLoader.WPF.ViewModels
         private void ListingNavigator_StateChanged()
         {            
             OnPropertyChanged(nameof(CurrentListing));
+        }
+
+        private void ListingFilters_StateChanged()
+        {
+            OnPropertyChanged(nameof(CurrentFilters));
         }
     }
 }

@@ -1,0 +1,43 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<CodeSnippet Format="1.0.0" xmlns="http://schemas.microsoft.com/VisualStudio/2005/CodeSnippet">
+	<Header>
+		<Title>PropertyChanged</Title>
+		<Author>Alex Kosma</Author>
+		<Shortcut>propch</Shortcut>
+		<Description>create property with event OnPropertyChanged</Description>
+		<SnippetTypes>
+			<SnippetType>Expansion</SnippetType>
+		</SnippetTypes>
+	</Header>
+	<Snippet>
+		<Declarations>
+			<Literal>
+				<ID>type</ID>
+				<Default>string</Default>
+			</Literal>
+			<Literal>
+				<ID>fieldName</ID>
+				<Default>_fieldName</Default>
+			</Literal>
+			<Literal>
+				<ID>propertyName</ID>
+				<Default>PropertyName</Default>
+			</Literal>
+		</Declarations>
+		<Code Language="CSharp">
+			<![CDATA[private $type$ $fieldName$;
+			public $type$ $propertyName$
+			{
+			get
+			{
+			return $fieldName$;
+			}
+			set
+			{
+			$fieldName$ = value;
+			OnPropertyChanged(nameof($propertyName$));
+			}
+			}]]>
+		</Code>
+	</Snippet>
+</CodeSnippet>

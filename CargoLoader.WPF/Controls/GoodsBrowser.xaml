@@ -22,6 +22,7 @@
             <RowDefinition Height="auto"/>
         </Grid.RowDefinitions>
 
+               
         <Button Grid.Row="0"
                 Height="auto" Width="auto"
                 Content="GetDataToDb"
@@ -55,15 +56,22 @@
                          CommandParameter="{x:Static nav:ListingType.Container}"/>
         </Grid>
 
-        
-        
-        <ContentControl Grid.Row="2"
+
+        <StackPanel Grid.Row="2" Orientation="Horizontal">
+            <ContentControl 
                         Height="500"
                         Width="1000"
                         Margin="5, 0, 0, 0"
                         HorizontalAlignment="Left"
                         ScrollViewer.VerticalScrollBarVisibility="Auto"
                         Content="{Binding CurrentListing.GenericListView}"/>
+
+            <!--<local:ProductFilters/>-->
+
+            <ContentControl
+                Content="{Binding CurrentFilters}"/>
+        </StackPanel>
+        
             
         
         <StackPanel Grid.Row="3" Orientation="Horizontal" Margin="5, 2, 0, 0">

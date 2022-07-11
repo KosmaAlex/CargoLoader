@@ -17,6 +17,10 @@ namespace CargoLoader.WPF.Navigators
     {
         IListingPageViewModel CurrentListing { get; set; }
         IList<IListingPageViewModel> GoodsPages { get; }
+
+        IFiltersViewModel CurrentFilters { get; }
+        IList<IFiltersViewModel> FiltersCollection { get; }
+
         event Action StateChanged;
     }
 }

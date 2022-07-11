@@ -3,7 +3,8 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:viewmodels="clr-namespace:CargoLoader.WPF.ViewModels"
              xmlns:views="clr-namespace:CargoLoader.WPF.Views"
-             xmlns:local="clr-namespace:CargoLoader.WPF">
+             xmlns:local="clr-namespace:CargoLoader.WPF" 
+             xmlns:controls="clr-namespace:CargoLoader.WPF.Controls">
     <Application.Resources>
 
         <ResourceDictionary>
@@ -22,7 +23,10 @@
             <DataTemplate DataType="{x:Type viewmodels:TransportViewModel}">
                 <views:TransportView/>
             </DataTemplate>
-                        
+
+            <DataTemplate DataType="{x:Type viewmodels:ProductFilterViewModel}">
+                <controls:ProductFilters/>
+            </DataTemplate>
         </ResourceDictionary>
     </Application.Resources>
 </Application>

@@ -1,0 +1,86 @@
+﻿<UserControl x:Class="CargoLoader.WPF.Controls.ProductFilters"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:CargoLoader.WPF.Controls"
+             xmlns:converters="clr-namespace:CargoLoader.WPF.Converters"
+             mc:Ignorable="d" 
+             d:DesignHeight="1200" d:DesignWidth="1200">
+   
+    <Grid>
+        <StackPanel Orientation="Vertical">
+            
+            <StackPanel Orientation="Horizontal">
+                <TextBlock Text="Name" />
+                <TextBox Text="{Binding Name}"/>                
+            </StackPanel>
+
+            <StackPanel Orientation="Horizontal">
+                <TextBlock Text="Marking" />
+                <TextBox Text="{Binding Marking}"/>
+            </StackPanel>
+
+            <TextBlock Text="Width" 
+                       HorizontalAlignment="Center"/>
+            <StackPanel Orientation="Horizontal">
+                <TextBox Text="{Binding MinWidth}"/>
+                <TextBlock Text="-"/>
+                <TextBox Text="{Binding Width}"/>
+            </StackPanel>
+
+            <TextBlock Text="Length" 
+                       HorizontalAlignment="Center"/>
+            <StackPanel Orientation="Horizontal">
+                <TextBox Text="{Binding MinLength}"/>
+                <TextBlock Text="-"/>
+                <TextBox Text="{Binding Length}"/>
+            </StackPanel>
+
+            <TextBlock Text="Height" 
+                       HorizontalAlignment="Center"/>
+            <StackPanel Orientation="Horizontal">
+                <TextBox Text="{Binding MinHeight}"/>
+                <TextBlock Text="-"/>
+                <TextBox Text="{Binding Height}"/>
+            </StackPanel>
+
+            <TextBlock Text="Volume" 
+                       HorizontalAlignment="Center"/>
+            <StackPanel Orientation="Horizontal">
+                <TextBox Text="{Binding MinVolume}"/>
+                <TextBlock Text="-"/>
+                <TextBox Text="{Binding Volume}"/>
+            </StackPanel>
+
+            <TextBlock Text="Weight" 
+                       HorizontalAlignment="Center"/>
+            <StackPanel Orientation="Horizontal">
+                <TextBox Text="{Binding MinWeight}"/>
+                <TextBlock Text="-"/>
+                <TextBox Text="{Binding Weight}"/>
+            </StackPanel>
+
+            <TextBlock Text="Fragility"/>
+            <Slider Minimum="0" Maximum="2" 
+                    IsSnapToTickEnabled="True"
+                    Ticks="0, 1, 2"                    
+                    Value="{Binding IsFragile}"/>
+
+            <TextBlock Text="Put On Top"/>
+            <Slider Minimum="0" Maximum="2" 
+                    IsSnapToTickEnabled="True"
+                    Ticks="0, 1, 2"                    
+                    Value="{Binding IsProp}"/>
+
+            <TextBlock Text="Rotate possible"/>
+            <Slider Minimum="0" Maximum="2" 
+                    IsSnapToTickEnabled="True"
+                    Ticks="0, 1, 2"                    
+                    Value="{Binding IsRotatable}"/>
+
+            <Button Content="Filtering"/>
+
+        </StackPanel>
+    </Grid>
+</UserControl>

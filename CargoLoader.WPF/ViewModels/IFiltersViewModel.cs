@@ -8,6 +8,7 @@ namespace CargoLoader.WPF.ViewModels
 {
     public interface IFiltersViewModel
     {
-        IList<IFiltersViewModel> Filters { get; }
+        Type FiltersType { get; }
+        IList<IFiltersViewModel> FiltersCollection { get; }
     }
 }

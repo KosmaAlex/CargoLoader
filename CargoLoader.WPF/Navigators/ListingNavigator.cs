@@ -17,6 +17,8 @@ namespace CargoLoader.WPF.Navigators
             set
             {
                 _currentListing = value;
+                _currentFilters = _filtersCollection.FirstOrDefault(f => 
+                    f.FiltersType == _currentListing.GetType().GetGenericArguments()[0]);
                 StateChanged.Invoke();
             }
         }
@@ -26,11 +28,19 @@ namespace CargoLoader.WPF.Navigators
             get { return _goodsPages; }
         }
 
+        private IFiltersViewModel _currentFilters;
+        public IFiltersViewModel CurrentFilters => _currentFilters;
+
+        private readonly IList<IFiltersViewModel> _filtersCollection;
+        public IList<IFiltersViewModel> FiltersCollection => _filtersCollection;
+
+
         public event Action StateChanged;
 
         public ListingNavigator()
         {
             _goodsPages = new List<IListingPageViewModel>();
+            _filtersCollection = new List<IFiltersViewModel>();
         }
     }
 }

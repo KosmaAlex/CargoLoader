@@ -72,6 +72,8 @@ namespace CargoLoader.WPF
                     services.AddSingleton<ListingViewModel<Product>>();
                     services.AddSingleton<ListingViewModel<Container>>();
 
+                    services.AddSingleton<ProductFilterViewModel>();
+
                     services.AddSingleton<MainViewModel>();
 
                     //TODO: think about interface or not
@@ -85,8 +87,13 @@ namespace CargoLoader.WPF
         {
             _host.Start();
 
+
+
             _host.Services.GetRequiredService<ListingViewModel<Product>>();
             _host.Services.GetRequiredService<ListingViewModel<Container>>();
+
+            _host.Services.GetRequiredService<ProductFilterViewModel>();
+
 
             _host.Services.GetRequiredService<OrdersViewModel>();
             _host.Services.GetRequiredService<GoodsViewModel>();
