@@ -66,8 +66,6 @@
                         ScrollViewer.VerticalScrollBarVisibility="Auto"
                         Content="{Binding CurrentListing.GenericListView}"/>
 
-            <!--<local:ProductFilters/>-->
-
             <ContentControl
                 Content="{Binding CurrentFilters}"/>
         </StackPanel>

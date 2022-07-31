@@ -89,44 +89,44 @@ namespace CargoLoader.EntityFraemwork.Services
             return await _itemDataService.GetByCustomProperty(propertyName, parameter);
         }
 
-        public async Task<IEnumerable<Cargo>> GetByHeight(decimal maxHeight, decimal minHeight = Constants.DefaultMinValue)
+        public void QueryByHeight(decimal? maxHeight, decimal? minHeight)
         {
-            return await _itemDataService.GetByHeight(maxHeight, minHeight);
+            _itemDataService.QueryByHeight(maxHeight, minHeight);
         }
 
-        public async Task<IEnumerable<Cargo>> GetByIsContainer(bool isContainer)
+        public void QueryByIsContainer(bool? isContainer)
         {
-            return await _itemDataService.GetByIsContainer(isContainer);
+            _itemDataService.QueryByIsContainer(isContainer);
         }
 
-        public async Task<IEnumerable<Cargo>> GetByIsFragile(bool isFragile)
+        public void QueryByIsFragile(bool? isFragile)
         {
-            return await _itemDataService.GetByIsFragile(isFragile);
+            _itemDataService.QueryByIsFragile(isFragile);
         }
 
-        public async Task<IEnumerable<Cargo>> GetByIsProp(bool isProp)
+        public void QueryByIsProp(bool? isProp)
         {
-            return await _itemDataService.GetByIsProp(isProp);
+            _itemDataService.QueryByIsProp(isProp);
         }
 
-        public async Task<IEnumerable<Cargo>> GetByIsRotatable(bool isRotatable)
+        public async void QueryByIsRotatable(bool? isRotatable)
         {
-            return await _itemDataService.GetByIsRotatable(isRotatable);
+            _itemDataService.QueryByIsRotatable(isRotatable);
         }
 
-        public async Task<IEnumerable<Cargo>> GetByLength(decimal maxLength, decimal minLength = (decimal)Constants.DefaultMinValue)
+        public void QueryByLength(decimal? maxLength, decimal? minLength)
         {
-            return await _itemDataService.GetByLength(maxLength, minLength);
+            _itemDataService.QueryByLength(maxLength, minLength);
         }
 
-        public async Task<Cargo> GetByMarking(string marking)
+        public void QueryByMarking(string? marking)
         {
-            return await _itemDataService.GetByMarking(marking);
+            _itemDataService.QueryByMarking(marking);
         }
 
-        public async Task<IEnumerable<Cargo>> GetByName(string name)
+        public void QueryByName(string? name)
         {
-            return await _itemDataService.GetByName(name);
+            _itemDataService.QueryByName(name);
         }
 
         public async Task<IEnumerable<Cargo>> GetByOrderId(int orderId)
@@ -146,19 +146,19 @@ namespace CargoLoader.EntityFraemwork.Services
             }
         }
 
-        public async Task<IEnumerable<Cargo>> GetByVolume(decimal volume, decimal minVolume = Constants.DefaultMinValue)
+        public void QueryByVolume(decimal? volume, decimal? minVolume)
         {
-            return await _itemDataService.GetByVolume(volume, minVolume);
+            _itemDataService.QueryByVolume(volume, minVolume);
         }
 
-        public async Task<IEnumerable<Cargo>> GetByWeight(decimal weight, decimal minWeight = Constants.DefaultMinValue)
+        public void QueryByWeight(decimal? weight, decimal? minWeight)
         {
-            return await _itemDataService.GetByWeight(weight, minWeight);
+            _itemDataService.QueryByWeight(weight, minWeight);
         }
 
-        public async Task<IEnumerable<Cargo>> GetByWidth(decimal maxWidth, decimal minWidth = Constants.DefaultMinValue)
+        public void QueryByWidth(decimal? maxWidth, decimal? minWidth)
         {
-            return await _itemDataService.GetByWidth(maxWidth, minWidth);
+            _itemDataService.QueryByWidth(maxWidth, minWidth);
         }
 
         public Task<IEnumerable<Cargo>> GetPageAsync(int page, int pageSize)
@@ -174,6 +174,12 @@ namespace CargoLoader.EntityFraemwork.Services
         public async Task<Cargo> Update(int id, Cargo entity)
         {
             return await _itemDataService.Update(id, entity);
+        }
+
+        
+        public Task<(IEnumerable<Cargo> filteredPage, int filteredPageCount)> ExecuteFilteringQuery(int pageNumber, int pageSize)
+        {
+            throw new NotImplementedException();
         }
     }
 }

@@ -16,10 +16,13 @@ namespace CargoLoader.WPF.Navigators
             get { return _currentListing; }
             set
             {
-                _currentListing = value;
-                _currentFilters = _filtersCollection.FirstOrDefault(f => 
-                    f.FiltersType == _currentListing.GetType().GetGenericArguments()[0]);
-                StateChanged.Invoke();
+                if(value != null)
+                {
+                    _currentListing = value;
+                    _currentFilters = _filtersCollection.FirstOrDefault(f =>
+                        f.FiltersType == _currentListing.GetType().GetGenericArguments()[0]);
+                    StateChanged.Invoke();
+                }                
             }
         }
         private readonly IList<IListingPageViewModel> _goodsPages;

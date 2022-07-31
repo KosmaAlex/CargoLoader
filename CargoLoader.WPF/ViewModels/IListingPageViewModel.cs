@@ -13,6 +13,7 @@ namespace CargoLoader.WPF.ViewModels
         GenericListView GenericListView { get; }
 
 
+        Task ApplyFilters();
         Task NextPageAsync();
         Task PreviousPageAsync();
         Task SpecifiedPageAsync(int requestedPage);

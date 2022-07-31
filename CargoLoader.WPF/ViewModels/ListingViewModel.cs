@@ -20,13 +20,16 @@ namespace CargoLoader.WPF.ViewModels
         private readonly IListingNavigator _listingNavigator;
         private readonly GenericListView _genericListView;
         private int _defaultPageSize = 30;
-        private int _page = 1;
-        private int _pagesCount;
+        private Action _instantiationPageLoad;
+        private bool _filtersActive;
+
 
         public GenericListView GenericListView => _genericListView;
         public IList<IListingPageViewModel> GoodsPages => _listingNavigator.GoodsPages;
         public Type PassedType => typeof(T);
         public IEnumerable<T> Items => _items;
+
+        private int _pagesCount;
         public int PagesCount
         {
             get
@@ -39,6 +42,8 @@ namespace CargoLoader.WPF.ViewModels
                 OnPropertyChanged(nameof(PagesCount));
             }
         }
+
+        private int _page = 1;
         public int Page
         {
             get
@@ -59,13 +64,13 @@ namespace CargoLoader.WPF.ViewModels
         {
             _listingNavigator = listingNavigator;
             _dataService = dataService;
-            _items = new ObservableCollection<T>();
 
+            _items = new ObservableCollection<T>();
             _genericListView = new GenericListView(this);
             _genericListView.ItemsSource = _items;
 
-            _listingNavigator.StateChanged += async () => await LoadItemsPage(_page);
-
+            _instantiationPageLoad = async() => await LoadPage(_page);
+            _listingNavigator.StateChanged += _instantiationPageLoad;
 
             NextPageCommand = new NextListingPageCommand(this);
             PreviousPageCommand = new PreviousListingPageCommand(this);
@@ -80,27 +85,92 @@ namespace CargoLoader.WPF.ViewModels
             }
         }
 
-        private async Task LoadItemsPage(int page)
+
+        private async Task LoadPage(int page)
         {
             if(this == _listingNavigator.CurrentListing ) 
             {
+                _filtersActive = false;
                 Page = page;
-                PagesCount = (await _dataService.GetTableCountAsync() / _defaultPageSize) + 1;
+                PagesCount = ((await _dataService.GetTableCountAsync() + _defaultPageSize -1) / _defaultPageSize);
 
                 IEnumerable<T> pageResult = await _dataService.GetPageAsync(page, _defaultPageSize);
-                _items.Clear();                
+
+                _items.Clear();
 
                 foreach (T item in pageResult)
                 {
                     _items.Add(item);
                 }
+
+                _listingNavigator.StateChanged -= _instantiationPageLoad;
             }            
         }
+
+        private async Task LoadFilteredPage(int page)
+        {
+            Page = page;
+
+            (IEnumerable<T> filteredPage, int filtredPageCount) = 
+                await _dataService.ExecuteFilteringQuery(page, _defaultPageSize);
+
+            _items.Clear();
+
+            foreach (T item in filteredPage)
+            {
+                _items.Add(item);
+            }
+        }
+
+        public async Task ApplyFilters()
+        {
+            _page = 1;
+            _filtersActive = true;
+
+           (IEnumerable<T> filteredPage, int filteredPageCount) = 
+                await _dataService.ExecuteFilteringQuery(_page, _defaultPageSize);
+
+            if (filteredPageCount == -1)
+            {
+                await LoadPage(1);
+                return;
+            }
+
+            PagesCount = filteredPageCount;
+
+            _items.Clear();
+
+            if (filteredPage.Count() == 0)
+            {
+                Page = 0;
+                return;
+            }
+
+            // TODO: decide.
+            // If set property up on this method(where now "_page")
+            // then when property changed and nothing to show in listview
+            // current page property blinks for a half second as 1 then set to 0
+            // to prevent it set property there.
+            Page = 1;
+
+            foreach(T item in filteredPage)
+            {
+                _items.Add(item);
+            }
+        }
+
         public async Task NextPageAsync()
         {
             if(_page < _pagesCount)
             {
-                await LoadItemsPage(_page + 1);
+                if (_filtersActive)
+                {
+                    await LoadFilteredPage(_page + 1);
+                }
+                else
+                {
+                    await LoadPage(_page + 1);
+                }
             }
         }
 
@@ -108,14 +178,29 @@ namespace CargoLoader.WPF.ViewModels
         {
             if(_page > 1)
             {
-                await LoadItemsPage(_page - 1);
+                if (_filtersActive)
+                {
+                    await LoadFilteredPage(_page - 1);
+                }
+                else
+                {
+                    await LoadPage(_page - 1);
+                }
             }
         }
+
         public async Task SpecifiedPageAsync(int requestedPage)
         {
             if(requestedPage > 0 && requestedPage <= _pagesCount)
             {
-                await LoadItemsPage(requestedPage);
+                if (_filtersActive)
+                {
+                    await LoadFilteredPage(requestedPage);
+                }
+                else
+                {
+                    await LoadPage(requestedPage);
+                }
             }
         }
     }

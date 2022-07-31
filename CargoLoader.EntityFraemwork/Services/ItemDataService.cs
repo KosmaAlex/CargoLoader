@@ -18,12 +18,14 @@ namespace CargoLoader.EntityFraemwork.Services
     {
         private readonly CargoLoaderDbContextFactory _contextFactory;
         private readonly NonQueryDataService<T> _nonQueryDataService;
+        private readonly Dictionary<string, Func<IQueryable<T>,IQueryable<T>>> _queries;
 
 
         public ItemDataService(CargoLoaderDbContextFactory contextFactory)
         {
             _contextFactory = contextFactory;
             _nonQueryDataService = new NonQueryDataService<T>(contextFactory);
+            _queries = new Dictionary<string, Func<IQueryable<T>, IQueryable<T>>>();
         }
 
         public async Task Create(T entity)
@@ -87,216 +89,242 @@ namespace CargoLoader.EntityFraemwork.Services
             }
         }
 
-        public async Task<IEnumerable<T>> GetByHeight(decimal height, decimal minHeight = Constants.DefaultMinValue)
+        public void QueryByHeight(decimal? height, decimal? minHeight)
         {
-            if(minHeight == Constants.DefaultMinValue)
+            if (_queries.ContainsKey(nameof(QueryByHeight)))
             {
-                minHeight = height;
+                _queries.Remove(nameof(QueryByHeight));
             }
+
+            if (height == null && minHeight == null)
+            {                
+                return;
+            }
+
+            Func<IQueryable<T>, IQueryable<T>> query;
+
+            query = (context) => from entity in context
+                                 where height == null ? entity.Height >= minHeight
+                                 : minHeight == null ? entity.Height <= height
+                                 : entity.Height <= height && entity.Height >= minHeight
+                                 select entity;
+
+            _queries.Add(nameof(QueryByHeight), query);
+        }
+
+        public void QueryByIsContainer(bool? isContainer)
+        {
+            if (_queries.ContainsKey(nameof(QueryByIsContainer)))
+            {
+                _queries.Remove(nameof(QueryByIsContainer));
+            }
+
+            if (isContainer == null)
+            {               
+                return;
+            }
+
+            Func<IQueryable<T>, IQueryable<T>> query;
+
+            query = (context) => from entity in context
+                                 where entity.IsContainer == isContainer
+                                 select entity;
+                                    
+            _queries.Add(nameof(QueryByIsContainer), query);
+        }
+
+        public void QueryByIsFragile(bool? isFragile)
+        {
+            if (_queries.ContainsKey(nameof(QueryByIsFragile)))
+            {
+                _queries.Remove(nameof(QueryByIsFragile));
+            }
+
+            if (isFragile == null)
+            {                
+                return;
+            }
+
+            Func<IQueryable<T>, IQueryable<T>> query;
+            query = (context) => from entity in context
+                                 where entity.IsFragile == isFragile
+                                 select entity;
                         
-            using(CargoLoaderDbContext context = _contextFactory.CreateContext())
-            {
-                IEnumerable<T> result = await context.Set<T>()
-                    .Where(e => e.Height <= height && e.Height >= minHeight)
-                    .ToListAsync();
-
-                if(result.Count() == 0)
-                {
-                    throw new ItemNotFoundException(nameof(IItem.Height));
-                }
-
-                return result;
-            }
+            _queries.Add(nameof(QueryByIsFragile), query);
         }
 
-        public async Task<IEnumerable<T>> GetByIsContainer(bool isContainer)
+        public void QueryByIsProp(bool? isProp)
         {
-            using (CargoLoaderDbContext context = _contextFactory.CreateContext())
+            if (_queries.ContainsKey(nameof(QueryByIsProp)))
             {
-                IEnumerable<T> result = await context.Set<T>()
-                    .Where(e => e.IsContainer == isContainer)
-                    .ToListAsync();
-
-                if (result.Count() == 0)
-                {
-                    throw new ItemNotFoundException(nameof(isContainer));
-                }
-
-                return result;
+                _queries.Remove(nameof(QueryByIsProp));
             }
+
+            if (isProp == null)
+            {                
+                return;
+            }
+
+            Func<IQueryable<T>, IQueryable<T>> query;
+            query = (context) => from entity in context
+                                 where entity.IsProp == isProp
+                                 select entity;
+
+            _queries.Add(nameof(QueryByIsProp), query);
         }
 
-        public async Task<IEnumerable<T>> GetByIsFragile(bool isFragile)
+        public void QueryByIsRotatable(bool? isRotatable)
         {
-            using (CargoLoaderDbContext context = _contextFactory.CreateContext())
+            if (_queries.ContainsKey(nameof(QueryByIsRotatable)))
             {
-                IEnumerable<T> result = await context.Set<T>()
-                    .Where(e => e.IsFragile == isFragile)
-                    .ToListAsync();
-
-                if (result.Count() == 0)
-                {
-                    throw new ItemNotFoundException(nameof(isFragile));
-                }
-
-                return result;
+                _queries.Remove(nameof(QueryByIsRotatable));
             }
+
+            if(isRotatable == null)
+            {
+                return;
+            }
+
+            Func<IQueryable<T>, IQueryable<T>> query;
+            query = (context) => from entity in context
+                                 where entity.IsRotatable == isRotatable
+                                 select entity;
+
+            _queries.Add(nameof(QueryByIsRotatable), query);
         }
 
-        public async Task<IEnumerable<T>> GetByIsProp(bool isProp)
+        public void QueryByLength(decimal? length, decimal? minLength)
         {
-            using (CargoLoaderDbContext context = _contextFactory.CreateContext())
+            if (_queries.ContainsKey(nameof(QueryByLength)))
             {
-                IEnumerable<T> result = await context.Set<T>()
-                    .Where(e => e.IsProp == isProp)
-                    .ToListAsync();
-
-                if (result.Count() == 0)
-                {
-                    throw new ItemNotFoundException(nameof(isProp));
-                }
-
-                return result;
+                _queries.Remove(nameof(QueryByLength));
             }
+
+            if(minLength == null && length == null)
+            {
+                return;
+            }
+
+            Func<IQueryable<T>, IQueryable<T>> query;
+
+            query = (context) => from entity in context
+                                 where length == null ? entity.Length >= minLength
+                                 : minLength == null ? entity.Length <= length
+                                 : entity.Length <= length && entity.Length >= minLength
+                                 select entity;
+
+            _queries.Add(nameof(QueryByLength), query);
         }
 
-        public async Task<IEnumerable<T>> GetByIsRotatable(bool isRotatable)
+        public void QueryByMarking(string? marking)
         {
-            using (CargoLoaderDbContext context = _contextFactory.CreateContext())
+            if (_queries.ContainsKey(nameof(QueryByMarking)))
             {
-                IEnumerable<T> result = await context.Set<T>()
-                    .Where(e => e.IsRotatable == isRotatable)
-                    .ToListAsync();
-
-                if (result.Count() == 0)
-                {
-                    throw new ItemNotFoundException(nameof(isRotatable));
-                }
-
-                return result;
+                _queries.Remove(nameof(QueryByMarking));
             }
+
+            if (marking == null)
+            {
+                return;
+            }
+
+            Func<IQueryable<T>, IQueryable<T>> query;
+
+            query = (context) => from entity in context
+                                 where entity.Marking.Contains(marking)
+                                 select entity;
+
+            _queries.Add(nameof(QueryByMarking), query);
         }
 
-        public async Task<IEnumerable<T>> GetByLength(decimal length, decimal minLength = (decimal)Constants.DefaultMinValue)
+        public void QueryByName(string? name)
         {
-            if(minLength == (decimal)Constants.DefaultMinValue)
+            if (_queries.ContainsKey(nameof(QueryByName)))
             {
-                minLength = length;
+                _queries.Remove(nameof(QueryByName));
             }
 
-            using (CargoLoaderDbContext context = _contextFactory.CreateContext())
+            if(name == null)
             {
-                IEnumerable<T> result = await context.Set<T>()
-                    .Where(e => e.Length <= length && e.Length >= minLength)
-                    .ToListAsync();
-
-                if (result.Count() == 0)
-                {
-                    throw new ItemNotFoundException(nameof(length));
-                }
-
-                return result;
+                return;
             }
+
+            Func<IQueryable<T>, IQueryable<T>> query;
+
+            query = (context) => from entity in context
+                                 where entity.Name.Contains(name)
+                                 select entity;
+
+            _queries.Add(nameof(QueryByName), query);
         }
 
-        public async Task<T> GetByMarking(string marking)
+        public void QueryByVolume(decimal? volume, decimal? minVolume)
         {
-            using (CargoLoaderDbContext context = _contextFactory.CreateContext())
+            if (_queries.ContainsKey(nameof(QueryByVolume)))
             {
-                T result = await context.Set<T>()
-                    .FirstOrDefaultAsync(e => e.Marking == marking);
+                _queries.Remove(nameof(QueryByVolume));
+            }            
 
-                if(result == null)
-                {
-                    throw new ItemNotFoundException(nameof(marking));
-                }
-
-                return result;
+            if(volume == null && minVolume == null)
+            {
+                return;
             }
+
+            Func<IQueryable<T>, IQueryable<T>> query;
+
+            query = (context) => from entity in context
+                                 where volume == null ? entity.Volume >= minVolume
+                                 : minVolume == null ? entity.Volume <= volume
+                                 : entity.Volume <= volume && entity.Volume >= minVolume
+                                 select entity;
+
+            _queries.Add(nameof(QueryByVolume), query);
         }
 
-        public async Task<IEnumerable<T>> GetByName(string name)
+        public void QueryByWeight(decimal? weight, decimal? minWeight)
         {
-            using (CargoLoaderDbContext context = _contextFactory.CreateContext())
+            if (_queries.ContainsKey(nameof(QueryByWeight)))
             {
-                IEnumerable<T> result = await context.Set<T>()
-                    .Where(e => e.Name.Contains(name))
-                    .ToListAsync();
-
-                if(result.Count() == 0)
-                {
-                    throw new ItemNotFoundException(nameof(name));
-                }
-
-                return result;
+                _queries.Remove(nameof(QueryByWeight));
             }
+
+            if(weight == null && minWeight == null)
+            {
+                return;
+            }
+
+            Func<IQueryable<T>, IQueryable<T>> query;
+
+            query = (context) => from entity in context
+                                 where weight == null ? entity.Weight >= minWeight 
+                                 : minWeight == null ? entity.Weight <= weight
+                                 : entity.Weight <= weight && entity.Weight >= minWeight
+                                 select entity;
+
+            _queries.Add(nameof(QueryByWeight), query);
         }
 
-        public async Task<IEnumerable<T>> GetByVolume(decimal volume, decimal minVolume = Constants.DefaultMinValue)
+        public void QueryByWidth(decimal? width, decimal? minWidth)
         {
-            using (CargoLoaderDbContext context = _contextFactory.CreateContext())
+            if (_queries.ContainsKey(nameof(QueryByWidth)))
             {
-                if(minVolume == Constants.DefaultMinValue)
-                {
-                    minVolume = volume;
-                }
-
-                IEnumerable<T> result = await context.Set<T>()
-                    .Where(e => e.Volume <= volume && e.Volume >= minVolume)
-                    .ToListAsync();
-
-                if (result.Count() == 0)
-                {
-                    throw new ItemNotFoundException(nameof(volume));
-                }
-
-                return result;
-            }
-        }
-
-        public async Task<IEnumerable<T>> GetByWeight(decimal weight, decimal minWeight = Constants.DefaultMinValue)
-        {
-            using (CargoLoaderDbContext context = _contextFactory.CreateContext())
-            {
-                
-                if(minWeight == Constants.DefaultMinValue)
-                {
-                    minWeight = weight;
-                }
-
-                IEnumerable<T> result = await context.Set<T>()
-                    .Where(e => e.Weight <= weight && e.Weight >= minWeight)
-                    .ToListAsync();
-
-                if (result.Count() == 0)
-                {
-                    throw new ItemNotFoundException(nameof(weight));
-                }
-
-                return result;
-            }
-        }
-
-        public async Task<IEnumerable<T>> GetByWidth(decimal width, decimal minWidth = Constants.DefaultMinValue)
-        {
-            if(minWidth == Constants.DefaultMinValue)
-            {
-                minWidth = width;
+                _queries.Remove(nameof(QueryByWidth));
             }
 
-            using (CargoLoaderDbContext context = _contextFactory.CreateContext())
+            if(width == null && minWidth == null)
             {
-                IEnumerable<T> result = await context.Set<T>()
-                    .Where(e => e.Width <= width && e.Width >= minWidth)
-                    .ToListAsync();
-
-                if (result.Count() == 0)
-                {
-                    throw new ItemNotFoundException(nameof(width));
-                }
-
-                return result;
+                return;
             }
+
+            Func<IQueryable<T>, IQueryable<T>> query;
+                        
+            query = (context) => from entity in context
+                                 where width == null ? entity.Width >= minWidth 
+                                 : minWidth == null ? entity.Width <= width
+                                 : entity.Width <= width && entity.Width >= minWidth
+                                 select entity;
+
+            _queries.Add(nameof(QueryByWidth), query);
         }
 
         public async Task<T> Update(int id, T entity)
@@ -316,12 +344,40 @@ namespace CargoLoader.EntityFraemwork.Services
         {
             using (CargoLoaderDbContext context = _contextFactory.CreateContext())
             {
-                IEnumerable<T> result = await context.Set<T>()
+                IQueryable<T> result = context.Set<T>()
+                    .OrderBy(e => e.Id)
                     .Skip((page - 1) * pageSize)
-                    .Take(pageSize)
-                    .ToListAsync();
+                    .Take(pageSize);
 
-                return result;
+                return await result.ToListAsync();
+            }
+        }
+
+        public async Task<(IEnumerable<T> filteredPage, int filteredPageCount)> ExecuteFilteringQuery(int pageNumber, int pageSize)
+        {            
+            if (_queries.Count == 0)
+            {
+                return (Enumerable.Empty<T>(), -1);
+            }
+
+            using (CargoLoaderDbContext context = _contextFactory.CreateContext())
+            {
+                IQueryable<T> query = context.Set<T>();
+
+                foreach (var func in _queries.Values)
+                {
+                    query = func.Invoke(query);
+                }
+
+                IEnumerable<T> result = await query
+                    .OrderBy(e => e.Id)
+                    .Skip((pageNumber - 1) * pageSize)
+                    .Take(pageSize)
+                    .ToListAsync();      
+                
+                int pageCount = (await query.CountAsync() + pageSize -1)/ pageSize;
+                                
+                return (result, pageCount);
             }
         }
     }

@@ -9,20 +9,21 @@ namespace CargoLoader.Domain.Services
 {
     public interface IItemDataService<T> : IDataService<T>
     {
-        Task<T> GetByMarking(string marking);
-        Task<IEnumerable<T>> GetByName(string name);
-        Task<IEnumerable<T>> GetByLength(decimal maxLength, decimal minLength);
-        Task<IEnumerable<T>> GetByWidth(decimal maxWidth, decimal minWidth);
-        Task<IEnumerable<T>> GetByHeight(decimal maxHeight, decimal minHeight);
-        Task<IEnumerable<T>> GetByVolume(decimal volume, decimal minVolume);
-        Task<IEnumerable<T>> GetByWeight (decimal weight, decimal minWeight);
-        Task<IEnumerable<T>> GetByIsFragile(bool isFragile);
-        Task<IEnumerable<T>> GetByIsRotatable(bool isRotatable);
-        Task<IEnumerable<T>> GetByIsProp(bool isProp);
-        Task<IEnumerable<T>> GetByIsContainer(bool isContainer);
+        void QueryByMarking(string? marking);
+        void QueryByName(string? name);
+        void QueryByLength(decimal? maxLength, decimal? minLength);
+        void QueryByWidth(decimal? maxWidth, decimal? minWidth);
+        void QueryByHeight(decimal? maxHeight, decimal? minHeight);
+        void QueryByVolume(decimal? maxVolume, decimal? minVolume);
+        void QueryByWeight (decimal? maxWeight, decimal? minWeight);
+        void QueryByIsFragile(bool? isFragile);
+        void QueryByIsRotatable(bool? isRotatable);
+        void QueryByIsProp(bool? isProp);
+        void QueryByIsContainer(bool? isContainer);
         Task<IEnumerable<T>> GetByCustomProperty(string propertyName, decimal parameter, decimal minParameter);
         Task<IEnumerable<T>> GetByCustomProperty(string propertyName, bool parameter);
         Task<int> GetTableCountAsync();
         Task<IEnumerable<T>> GetPageAsync(int page, int pageSize);
+        Task<(IEnumerable<T> filteredPage, int filteredPageCount)> ExecuteFilteringQuery(int pageNumber, int pageSize);
     }
 }
