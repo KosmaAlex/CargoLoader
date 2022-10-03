@@ -1,9 +1,12 @@
-﻿using CargoLoader.Domain.Exceptions;
+﻿using CargoLoader.Domain.Comparers;
+using CargoLoader.Domain.Exceptions;
 using CargoLoader.Domain.Models;
 using CargoLoader.Domain.Services;
 using CargoLoader.GalacentreAPI.Models;
 using System;
 using System.Collections.Generic;
+using System.Drawing;
+using System.Drawing.Imaging;
 using System.Linq;
 using System.Reflection;
 using System.Text;
@@ -14,31 +17,39 @@ namespace CargoLoader.GalacentreAPI.Services
     public class GalacentreMappingService
     {
 
-        //TODO: remove httpClient to service
-        private readonly GalacentreHttpClient _httpClient;
+        private readonly GalacentreHttpService _httpService;
         private readonly IItemDataService<Product> _productDataService;
 
-        public GalacentreMappingService(IItemDataService<Product> productDataService, GalacentreHttpClient httpClient)
+        public GalacentreMappingService(IItemDataService<Product> productDataService, GalacentreHttpService httpClient)
         {
-            _httpClient = httpClient;
+            _httpService = httpClient;
             _productDataService = productDataService;
         }
 
         //TODO: remove httpClient to service
         public async Task LoadDataToDb()
         {
-            IEnumerable<Product> products = await GetDataAsync();
+            IEnumerable<Product> products = await GetProductsAsync();
 
             foreach (Product product in products)
             {
-                _productDataService.Create(product);
+                Product temp = await _productDataService.GetByMarkAsync(product.Marking);
+
+                if (temp != null)
+                {
+                    _productDataService.Update(temp.Id, product);
+                }
+                else
+                {
+                    _productDataService.Create(product);
+                }
             }
         }
 
-        public async Task<IEnumerable<Product>> GetDataAsync()
+        public async Task<IEnumerable<Product>> GetProductsAsync()
         {
             List<Product> products = new List<Product>();
-            GalacentreResponse response = await _httpClient.GetAsync();
+            GalacentreResponse response = await _httpService.GetDataAsync();
 
             List<GalacentreDataObject> dataObjects = response.Data;
             List<GalacentreDataObject> sortedObjects = new List<GalacentreDataObject>();
@@ -54,7 +65,7 @@ namespace CargoLoader.GalacentreAPI.Services
 
             foreach (GalacentreDataObject dataObject in sortedObjects)
             {
-                Product product = Mapping(dataObject);
+                Product product = Map(dataObject);
 
                 if(product != null)
                 {
@@ -70,14 +81,15 @@ namespace CargoLoader.GalacentreAPI.Services
             return products;
         }
 
-        private Product Mapping(GalacentreDataObject dataObject)
+        private Product Map(GalacentreDataObject dataObject)
         {
-            decimal[] dimensions = DimensionsResolve(dataObject, out bool dimensionResolve);
-            decimal weight = WeightResolve(dataObject, out bool weightResolve);
-            bool isFragile = FragileResolve(dataObject, out bool fragileResolve);
-            bool isRotatable = RotateResolve(dataObject);
-            bool isProp = PropResolve(dataObject, out bool propResolve);
-            string name = NameResolve(dataObject);
+            decimal[] dimensions = DimensionsResolver(dataObject, out bool dimensionResolve);
+            decimal weight = WeightResolver(dataObject, out bool weightResolve);
+            bool isFragile = FragileResolver(dataObject, out bool fragileResolve);
+            bool isRotatable = RotateResolver(dataObject);
+            bool isProp = PropResolver(dataObject, out bool propResolve);
+            string name = NameResolver(dataObject);
+            byte[] thumbnail = ThumbnailResolverAsync(dataObject);
 
             if (fragileResolve && dimensionResolve && propResolve && weightResolve)
             {
@@ -92,14 +104,54 @@ namespace CargoLoader.GalacentreAPI.Services
                     Volume = dimensions.Aggregate((a, b) => a * b),
                     IsFragile = isFragile,
                     IsRotatable = isRotatable,
-                    IsProp = isProp
+                    IsProp = isProp,
+                    Thumbnail = thumbnail
                 };
                 return product;
             }    
             return null;
         }
 
-        private decimal WeightResolve(GalacentreDataObject dataObject, out bool weightResolve)
+
+        private byte[] ThumbnailResolverAsync(GalacentreDataObject dataObject)
+        {
+            byte[] thumbnail;
+
+            if (!string.IsNullOrEmpty(dataObject.Image))
+            {
+                byte[] temp =  _httpService.GetImageAsync(dataObject.Image).Result;
+                
+                thumbnail = CreateThumbnail(temp, dataObject);
+
+                return thumbnail;
+            }
+            else
+            {
+                string filePath = @"C:\Users\AlexK\source\repos\CargoLoader\cargoLoader.Domain\Resources\no_image.jpeg";
+
+                thumbnail = File.ReadAllBytes(filePath);
+
+                return thumbnail;
+            }
+        }
+
+        private byte[] CreateThumbnail(byte[] image, GalacentreDataObject dataObject)
+        {
+            byte[] thumbnail;
+            using (MemoryStream stream = new MemoryStream(), resizedStream = new MemoryStream())
+            {
+                stream.Write(image, 0, image.Length);
+                Bitmap bitmap = new Bitmap(stream);
+                int size = 200;
+                Bitmap resizedBitmap = new Bitmap(bitmap, size, size);
+                resizedBitmap.Save(resizedStream, ImageFormat.Png);
+                resizedBitmap.Save(@"C:\Users\AlexK\Desktop\ProdThum\" + dataObject.Id + ".jpg", ImageFormat.Jpeg);
+                thumbnail = resizedStream.ToArray();
+                return thumbnail;
+            }
+        }
+
+        private decimal WeightResolver(GalacentreDataObject dataObject, out bool weightResolve)
         {
             string temp = String.Format("{0:0.###}", dataObject.Specifications
                 .FirstOrDefault(s => s.Contains(Constants.SpecWeight))
@@ -111,7 +163,7 @@ namespace CargoLoader.GalacentreAPI.Services
             return result;
         }
 
-        private string NameResolve(GalacentreDataObject dataObject)
+        private string NameResolver(GalacentreDataObject dataObject)
         {
             string firstPart = dataObject.Props
                 .FirstOrDefault(s => s.Contains(Constants.PropsType))
@@ -123,12 +175,12 @@ namespace CargoLoader.GalacentreAPI.Services
             return $"{firstPart} {secondPart}";
         }
 
-        private bool PropResolve(GalacentreDataObject dataObject, out bool propResolve)
+        private bool PropResolver(GalacentreDataObject dataObject, out bool propResolve)
         {            
             string material = dataObject.Specifications
                 .FirstOrDefault(s => s.Contains(Constants.SpecMaterial));
 
-            bool nonPropMaterial = Constants.nonPropMaterials
+            bool nonPropMaterial = Constants.NonPropMaterials
                 .Any(s => material.Contains(s, StringComparison.InvariantCultureIgnoreCase));
             bool PropMaterial = Constants.PropMaterials
                 .Any(s => material.Contains(s, StringComparison.InvariantCultureIgnoreCase));
@@ -148,7 +200,7 @@ namespace CargoLoader.GalacentreAPI.Services
             return false;
         }
 
-        private bool RotateResolve(GalacentreDataObject dataObject)
+        private bool RotateResolver(GalacentreDataObject dataObject)
         {
             bool rotateble = !dataObject.Specifications
                 .Any(s => s.Contains(Constants.SpecPower, StringComparison.InvariantCultureIgnoreCase));
@@ -156,7 +208,7 @@ namespace CargoLoader.GalacentreAPI.Services
             return rotateble;
         }
 
-        private decimal[] DimensionsResolve(GalacentreDataObject dataObject, out bool dimensionResolve)
+        private decimal[] DimensionsResolver(GalacentreDataObject dataObject, out bool dimensionResolve)
         {
             string[] dimensions = dataObject.Specifications
                 .FirstOrDefault(s => s.Contains(Constants.SpecDimensions))
@@ -190,14 +242,14 @@ namespace CargoLoader.GalacentreAPI.Services
             return result;
         }
 
-        private bool FragileResolve(GalacentreDataObject dataObject, out bool fragileResolve)
+        private bool FragileResolver(GalacentreDataObject dataObject, out bool fragileResolve)
         {            
             string material = dataObject.Specifications
                 .FirstOrDefault(s => s.Contains(Constants.SpecMaterial));
 
-            bool nonFragileMaterial = Constants.nonFragileMaterials
+            bool nonFragileMaterial = Constants.NonFragileMaterials
                 .Any(s => material.Contains(s, StringComparison.InvariantCultureIgnoreCase));
-            bool FragileMaterial = Constants.fragileMaterials
+            bool FragileMaterial = Constants.FragileMaterials
                 .Any(s => material.Contains(s, StringComparison.InvariantCultureIgnoreCase));
 
             

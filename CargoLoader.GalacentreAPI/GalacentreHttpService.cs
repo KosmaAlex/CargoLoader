@@ -11,26 +11,26 @@ using System.Threading.Tasks;
 
 namespace CargoLoader.GalacentreAPI
 {
-    public class GalacentreHttpClient
+    public class GalacentreHttpService
     {
         private readonly HttpClient _httpClient;
         private readonly string _apiKey;
 
-        public GalacentreHttpClient(HttpClient httpClient, GalacentreApiKey apiKey)
+        public GalacentreHttpService(HttpClient httpClient, GalacentreApiKey apiKey)
         {
             _httpClient = httpClient;
             _apiKey = apiKey.Key;
         }
 
-        public async Task<GalacentreResponse> GetAsync()
+        public async Task<GalacentreResponse> GetDataAsync()
         {
             HttpResponseMessage response = await _httpClient
-                .GetAsync($"?key={_apiKey}&store=msk&select=props,specifications,name");
+                .GetAsync($"api/v2/catalog/json/?key={_apiKey}&store=msk&select=props,specifications,name,image");
 
             if (!response.IsSuccessStatusCode)
             {
                 throw new InvalidHttpResponseException
-                    ($"{_httpClient.BaseAddress}?key={_apiKey}&store=msk&select=props,specifications,name",
+                    ($"{_httpClient.BaseAddress}api/v2/catalog/json/?key={_apiKey}&store=msk&select=props,specifications,name",
                     response.StatusCode.ToString());
             }
 
@@ -44,6 +44,11 @@ namespace CargoLoader.GalacentreAPI
             GalacentreResponse result = JsonConvert.DeserializeObject<GalacentreResponse>(jsonResponse);
 
             return result;
+        }
+
+        public async Task<byte[]> GetImageAsync(string url)
+        {
+            return await _httpClient.GetByteArrayAsync(url.Replace(_httpClient.BaseAddress.ToString(), string.Empty));
         }
     }
 }

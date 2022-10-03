@@ -11,6 +11,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CargoLoader.WPF", "CargoLoa
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CargoLoader.GalacentreAPI", "CargoLoader.GalacentreAPI\CargoLoader.GalacentreAPI.csproj", "{46C24CA7-D835-418F-AB8D-04789F6FD89B}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Demo", "Demo\Demo.csproj", "{27D07F37-7B46-4FB3-98B4-42EB756D5C8A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,6 +35,10 @@ Global
 		{46C24CA7-D835-418F-AB8D-04789F6FD89B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{46C24CA7-D835-418F-AB8D-04789F6FD89B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{46C24CA7-D835-418F-AB8D-04789F6FD89B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{27D07F37-7B46-4FB3-98B4-42EB756D5C8A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{27D07F37-7B46-4FB3-98B4-42EB756D5C8A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{27D07F37-7B46-4FB3-98B4-42EB756D5C8A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{27D07F37-7B46-4FB3-98B4-42EB756D5C8A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

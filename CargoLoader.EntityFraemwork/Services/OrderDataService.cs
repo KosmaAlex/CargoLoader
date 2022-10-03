@@ -22,6 +22,16 @@ namespace CargoLoader.EntityFraemwork.Services
             _nonQueryDataService = new NonQueryDataService<Order>(contextFactory);
         }
 
+        public bool Contains(Order entity)
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool Contains(Order entity, IEqualityComparer<Order> comparer)
+        {
+            throw new NotImplementedException();
+        }
+
         public async Task Create(Order order)
         {
             using(CargoLoaderDbContext context = _contextFactory.CreateContext())

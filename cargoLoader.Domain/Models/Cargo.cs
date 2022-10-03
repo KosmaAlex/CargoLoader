@@ -1,4 +1,5 @@
-﻿using System;
+﻿using CargoLoader.Domain.Attributes;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
@@ -26,5 +27,8 @@ namespace CargoLoader.Domain.Models
         public List<Cargo>? ContainedCargo { get; set; }
         public int? ContainerId { get; set; }
         public Cargo? Container { get; set; }
+
+        [Image]
+        public byte[]? Thumbnail { get; set; }
     }
 }

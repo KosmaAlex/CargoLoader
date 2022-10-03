@@ -1,4 +1,5 @@
-﻿using CargoLoader.Domain.Exceptions;
+﻿using CargoLoader.Domain.Comparers;
+using CargoLoader.Domain.Exceptions;
 using CargoLoader.Domain.Models;
 using CargoLoader.Domain.Services;
 using Microsoft.EntityFrameworkCore;
@@ -90,6 +91,14 @@ namespace CargoLoader.EntityFraemwork.Services.Common
                 await context.SaveChangesAsync();
 
                 return entity;
+            }
+        }
+
+        public bool Contains(T entity, IEqualityComparer<T> comparer)
+        {
+            using(CargoLoaderDbContext context = _contextFactory.CreateContext())
+            {
+                return context.Set<T>().Contains(entity, comparer);
             }
         }
     }

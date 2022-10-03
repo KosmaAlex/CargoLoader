@@ -19,20 +19,32 @@ namespace CargoLoader.WPF.Navigators
                 if(value != null)
                 {
                     _currentListing = value;
-                    _currentFilters = _filtersCollection.FirstOrDefault(f =>
-                        f.FiltersType == _currentListing.GetType().GetGenericArguments()[0]);
+                    //_currentFilters = _filtersCollection.FirstOrDefault(f =>
+                    //    f.FiltersType == _currentListing.GetType().GetGenericArguments()[0]);
                     StateChanged.Invoke();
                 }                
             }
         }
+
+        private IFiltersViewModel _currentFilters;
+        public IFiltersViewModel CurrentFilters
+        {
+            get { return _currentFilters; }
+            set
+            {
+                if(value != null)
+                {
+                    _currentFilters = value;
+                    StateChanged.Invoke();
+                }
+            }
+        }
+
         private readonly IList<IListingPageViewModel> _goodsPages;
         public IList<IListingPageViewModel> GoodsPages
         {
             get { return _goodsPages; }
-        }
-
-        private IFiltersViewModel _currentFilters;
-        public IFiltersViewModel CurrentFilters => _currentFilters;
+        }        
 
         private readonly IList<IFiltersViewModel> _filtersCollection;
         public IList<IFiltersViewModel> FiltersCollection => _filtersCollection;

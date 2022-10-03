@@ -24,10 +24,9 @@ namespace CargoLoader.WPF.Commands
             return true;
         }
 
-        //TODO: fix async void.
-        public async void Execute(object? parameter)
+        public void Execute(object? parameter)
         {
-            await _galacentreMappingService.LoadDataToDb();
+            Task.Run(() => _galacentreMappingService.LoadDataToDb());
         }
     }
 }

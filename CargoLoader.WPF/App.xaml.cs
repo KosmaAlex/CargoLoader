@@ -7,6 +7,7 @@ using CargoLoader.GalacentreAPI.Models;
 using CargoLoader.GalacentreAPI.Services;
 using CargoLoader.WPF.Navigators;
 using CargoLoader.WPF.ViewModels;
+using CargoLoader.WPF.ViewModels.Factories;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -46,11 +47,10 @@ namespace CargoLoader.WPF
                     string apiKey = context.Configuration.GetValue<string>("GALACENTRE_API_KEY");
 
                     services.AddSingleton(new GalacentreApiKey(apiKey));
-                    services.AddHttpClient<GalacentreHttpClient>(c =>
+                    services.AddHttpClient<GalacentreHttpService>(c =>
                     {
-                        c.BaseAddress = new Uri("http://www.galacentre.ru/api/v2/catalog/json/");
-                    });
-                                
+                        c.BaseAddress = new Uri("http://www.galacentre.ru/");
+                    });                             
 
                     string connectionString = context.Configuration.GetConnectionString("mssqllocal");
                     services.AddDbContext<CargoLoaderDbContext>(o => o.UseSqlServer("Server=(localdb)\\mssqllocaldb;Database=CargoLoader;Trusted_Connection=True;"));
@@ -69,10 +69,33 @@ namespace CargoLoader.WPF
                     services.AddSingleton<GoodsViewModel>();
                     services.AddSingleton<TransportViewModel>();
 
+                    services.AddSingleton<IPageViewModelFactory, PageViewModelFactory>();
+                    services.AddSingleton<CreatePageViewModel<OrdersViewModel>>(services => 
+                    () => services.GetRequiredService<OrdersViewModel>());
+                    services.AddSingleton<CreatePageViewModel<GoodsViewModel>>(services => 
+                    () => services.GetRequiredService<GoodsViewModel>());
+                    services.AddSingleton<CreatePageViewModel<TransportViewModel>>(services => 
+                    () => services.GetRequiredService<TransportViewModel>());
+
+
                     services.AddSingleton<ListingViewModel<Product>>();
                     services.AddSingleton<ListingViewModel<Container>>();
 
-                    services.AddSingleton<ProductFilterViewModel>();
+                    services.AddSingleton<IListingPageViewModelFactory, ListingPageViewModelFactory>();
+                    services.AddSingleton<CreateListingPageViewModel<ListingViewModel<Product>>>(services =>
+                    () => services.GetRequiredService<ListingViewModel<Product>>());
+                    services.AddSingleton<CreateListingPageViewModel<ListingViewModel<Container>>>(services =>
+                    () => services.GetRequiredService<ListingViewModel<Container>>());
+                                                          
+
+                    services.AddSingleton<ProductFiltersViewModel>();
+                    services.AddSingleton<ContainerFiltersViewModel>();
+
+                    services.AddSingleton<IFiltersViewModelFactory, FiltersViewModelFactory>();
+                    services.AddSingleton<CreateFiltersViewModel<ProductFiltersViewModel>>(services =>
+                    () => services.GetRequiredService<ProductFiltersViewModel>());
+                    services.AddSingleton<CreateFiltersViewModel<ContainerFiltersViewModel>>(services =>
+                    () => services.GetRequiredService<ContainerFiltersViewModel>());
 
                     services.AddSingleton<MainViewModel>();
 
@@ -89,15 +112,16 @@ namespace CargoLoader.WPF
 
 
 
-            _host.Services.GetRequiredService<ListingViewModel<Product>>();
-            _host.Services.GetRequiredService<ListingViewModel<Container>>();
+            //_host.Services.GetRequiredService<ListingViewModel<Product>>();
+            //_host.Services.GetRequiredService<ListingViewModel<Container>>();
 
-            _host.Services.GetRequiredService<ProductFilterViewModel>();
+            //_host.Services.GetRequiredService<ProductFiltersViewModel>();
+            //_host.Services.GetRequiredService<ContainerFiltersViewModel>();
 
 
-            _host.Services.GetRequiredService<OrdersViewModel>();
-            _host.Services.GetRequiredService<GoodsViewModel>();
-            _host.Services.GetRequiredService<TransportViewModel>();                      
+            //_host.Services.GetRequiredService<OrdersViewModel>();
+            //_host.Services.GetRequiredService<GoodsViewModel>();
+            //_host.Services.GetRequiredService<TransportViewModel>();                      
 
 
             Window window = _host.Services.GetRequiredService<MainWindow>();

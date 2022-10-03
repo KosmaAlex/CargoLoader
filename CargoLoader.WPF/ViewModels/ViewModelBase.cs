@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 
 namespace CargoLoader.WPF.ViewModels
 {
+    public delegate TViewModel CreatePageViewModel<TViewModel>() where TViewModel : IPageViewModel;
     public class ViewModelBase : INotifyPropertyChanged
     {
         public event PropertyChangedEventHandler? PropertyChanged;

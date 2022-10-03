@@ -44,49 +44,73 @@ namespace CargoLoader.EntityFraemwork.Services
             return result;
         }
 
+        public async Task<T> GetByMarkAsync(string mark)
+        {
+            using (CargoLoaderDbContext context = _contextFactory.CreateContext())
+            {
+                T entity = await context.Set<T>().FirstOrDefaultAsync(e => e.Marking == mark);
+                return entity;
+            }
+        }
         public async Task<IEnumerable<T>> GetAll()
         {
             return await _nonQueryDataService.GetAll();
+        }        
+
+        public bool Contains(T entity, IEqualityComparer<T> comparer)
+        {
+            return _nonQueryDataService.Contains(entity, comparer);
         }
 
-        public async Task<IEnumerable<T>> GetByCustomProperty(string propertyName,
-            decimal parameter, decimal minParameter = Constants.DefaultMinValue)
+        public void QueryByCustomProperty<TValueType>(string propertyName, TValueType? parameter)
         {
-            if(minParameter == Constants.DefaultMinValue)
+            if (_queries.ContainsKey(propertyName))
             {
-                minParameter = parameter;
+                _queries.Remove(propertyName);
             }
 
-            using (CargoLoaderDbContext context = _contextFactory.CreateContext())
-            {                
-                IEnumerable<T> result = await context.Set<T>()
-                    .Where($"{propertyName} <= {parameter} && {propertyName} >= {minParameter}")
-                    .ToListAsync();
-
-                if(result.Count() == 0)
-                {
-                    throw new ItemNotFoundException(propertyName);
-                }
-
-                return result;
+            if(parameter == null)
+            {
+                return;
             }
+
+            Func<IQueryable<T>, IQueryable<T>> query;
+
+            query = (context) => context.Where($"{propertyName} == {parameter}");
+
+            _queries.Add(propertyName, query);
         }
 
-        public async Task<IEnumerable<T>> GetByCustomProperty(string propertyName, bool parameter)
+        public void QueryByCustomProperty<TValueType>(string propertyName,
+            TValueType? parameter, TValueType? minParameter) 
         {
-            using (CargoLoaderDbContext context = _contextFactory.CreateContext())
+            if (_queries.ContainsKey(propertyName))
             {
-                IEnumerable<T> result = await context.Set<T>()
-                    .Where($"{propertyName} == {parameter}")
-                    .ToListAsync();
-
-                if (result.Count() == 0)
-                {
-                    throw new ItemNotFoundException(propertyName);
-                }
-
-                return result;
+                _queries.Remove(propertyName);
             }
+
+            if(parameter == null && minParameter == null)
+            {
+                return;
+            }
+
+            Func<IQueryable<T>, IQueryable<T>> query;
+
+            if(parameter == null)
+            {
+                query = (context) => context.Where($"{propertyName} >= {minParameter}");
+            }
+            else if(minParameter == null)
+            {
+                query = (context) => context.Where($"{propertyName} <= {parameter}");
+            }
+            else
+            {
+                query = (context) => context.Where($"{propertyName} <= {parameter} && {propertyName} >= {minParameter}");
+            }
+                        
+            _queries.Add(propertyName, query);
+
         }
 
         public void QueryByHeight(decimal? height, decimal? minHeight)

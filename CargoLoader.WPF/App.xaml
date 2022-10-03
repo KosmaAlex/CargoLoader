@@ -24,8 +24,12 @@
                 <views:TransportView/>
             </DataTemplate>
 
-            <DataTemplate DataType="{x:Type viewmodels:ProductFilterViewModel}">
+            <DataTemplate DataType="{x:Type viewmodels:ProductFiltersViewModel}">
                 <controls:ProductFilters/>
+            </DataTemplate>
+
+            <DataTemplate DataType="{x:Type viewmodels:ContainerFiltersViewModel}">
+                <controls:ContainerFilters/>
             </DataTemplate>
         </ResourceDictionary>
     </Application.Resources>

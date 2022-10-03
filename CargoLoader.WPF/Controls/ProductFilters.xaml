@@ -6,7 +6,8 @@
              xmlns:local="clr-namespace:CargoLoader.WPF.Controls"
              xmlns:sys="clr-namespace:System;assembly=mscorlib"
              mc:Ignorable="d" 
-             d:DesignHeight="1200" d:DesignWidth="1200">
+             d:DesignHeight="1200" d:DesignWidth="1200"
+             MaxWidth="300">
 
     <UserControl.Resources>
         <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
@@ -37,7 +38,8 @@
                         <RowDefinition Height="auto"/>
                     </Grid.RowDefinitions>
 
-                    <Grid Grid.Row="0">
+                    <Grid Grid.Row="0" 
+                          HorizontalAlignment="Center">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="auto" SharedSizeGroup="leftLabel"/>
                             <ColumnDefinition Width="auto"/>
@@ -57,7 +59,8 @@
                     </Grid>
 
                     <Grid Grid.Row="1"
-                      Margin="0 15 0 0">
+                          HorizontalAlignment="Center"
+                          Margin="0 15 0 0">
 
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="auto" SharedSizeGroup="leftLabel"/>
@@ -77,8 +80,8 @@
 
 
                     <Grid Grid.Row="2"
-                      Margin="0 15 0 0"
-                      HorizontalAlignment="Center">
+                          Margin="0 15 0 0"
+                          HorizontalAlignment="Center">
 
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="*" SharedSizeGroup="leftBox"/>
@@ -115,7 +118,8 @@
                                  Text="{Binding Width, TargetNullValue={x:Static sys:String.Empty}}"/>
                     </Grid>
 
-                    <Grid Grid.Row="3">
+                    <Grid Grid.Row="3"
+                          HorizontalAlignment="Center">
 
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="*" SharedSizeGroup="leftBox"/>
@@ -152,7 +156,8 @@
                                  Text="{Binding Length, TargetNullValue={x:Static sys:String.Empty}}"/>
                     </Grid>
 
-                    <Grid Grid.Row="4">
+                    <Grid Grid.Row="4"
+                          HorizontalAlignment="Center">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="*" SharedSizeGroup="leftBox"/>
                             <ColumnDefinition Width="*" SharedSizeGroup="centerLabel"/>
@@ -184,7 +189,8 @@
                     </Grid>
 
 
-                    <Grid Grid.Row="5">
+                    <Grid Grid.Row="5"
+                          HorizontalAlignment="Center">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="*" SharedSizeGroup="leftBox"/>
                             <ColumnDefinition Width="*" SharedSizeGroup="centerLabel"/>
@@ -216,7 +222,8 @@
                     </Grid>
 
 
-                    <Grid Grid.Row="6">
+                    <Grid Grid.Row="6"
+                          HorizontalAlignment="Center">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="*" SharedSizeGroup="leftBox"/>
                             <ColumnDefinition Width="*" SharedSizeGroup="centerLabel"/>
@@ -249,7 +256,7 @@
 
 
                     <Grid Grid.Row="7"
-                      Margin="0 10 0 0">
+                          Margin="0 10 0 0">
                         <Grid.RowDefinitions>
                             <RowDefinition Height="auto"/>
                             <RowDefinition Height="auto"/>

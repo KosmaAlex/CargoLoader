@@ -14,7 +14,7 @@
         <converters:EqualValueToParameterConverter x:Key="EqualValueToParameterConverter"/>
     </UserControl.Resources>
     
-    <Grid>
+    <Grid HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
         <Grid.RowDefinitions>
             <RowDefinition Height="auto"/>
             <RowDefinition Height="auto"/>
@@ -22,13 +22,22 @@
             <RowDefinition Height="auto"/>
         </Grid.RowDefinitions>
 
-               
-        <Button Grid.Row="0"
+
+        <StackPanel Grid.Row="0" Orientation="Horizontal">
+            
+            <Button Height="auto" Width="auto"
+                    Content="GetContainers"
+                    HorizontalAlignment="Right"
+                    Margin="10"
+                    Command="{Binding GetContainersCommand}"/>
+            
+            <Button 
                 Height="auto" Width="auto"
                 Content="GetDataToDb"
                 HorizontalAlignment="Right"
                 Margin="10"
                 Command="{Binding GetDataToDbCommand}"/>
+        </StackPanel>
 
         <Grid Grid.Row="1" Margin="5, 0, 0, 0">
             <Grid.ColumnDefinitions>
@@ -57,18 +66,19 @@
         </Grid>
 
 
-        <StackPanel Grid.Row="2" Orientation="Horizontal">
-            <ContentControl 
-                        Height="500"
-                        Width="1000"
-                        Margin="5, 0, 0, 0"
-                        HorizontalAlignment="Left"
-                        ScrollViewer.VerticalScrollBarVisibility="Auto"
-                        Content="{Binding CurrentListing.GenericListView}"/>
+        <Grid Grid.Row="2" Height="650" >
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="4*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <ContentControl Grid.Column="0"
+                            Margin="5, 0, 0, 0"
+                            Content="{Binding CurrentListing.GenericListView}"/>
 
-            <ContentControl
-                Content="{Binding CurrentFilters}"/>
-        </StackPanel>
+            <ContentControl Grid.Column="1"
+                            Content="{Binding CurrentFilters}"/>
+        </Grid>
         
             
         

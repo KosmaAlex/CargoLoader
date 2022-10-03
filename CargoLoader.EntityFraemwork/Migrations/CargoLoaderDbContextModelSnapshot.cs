@@ -65,6 +65,9 @@ namespace CargoLoader.EntityFraemwork.Migrations
                     b.Property<int>("OrderId")
                         .HasColumnType("int");
 
+                    b.Property<byte[]>("Thumbnail")
+                        .HasColumnType("varbinary(max)");
+
                     b.Property<decimal?>("Volume")
                         .HasColumnType("decimal(18,2)");
 
@@ -81,7 +84,7 @@ namespace CargoLoader.EntityFraemwork.Migrations
 
                     b.HasIndex("OrderId");
 
-                    b.ToTable("Cargo", (string)null);
+                    b.ToTable("Cargo");
                 });
 
             modelBuilder.Entity("CargoLoader.Domain.Models.Container", b =>
@@ -121,6 +124,9 @@ namespace CargoLoader.EntityFraemwork.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<byte[]>("Thumbnail")
+                        .HasColumnType("varbinary(max)");
+
                     b.Property<decimal?>("Volume")
                         .HasColumnType("decimal(18,2)");
 
@@ -136,7 +142,7 @@ namespace CargoLoader.EntityFraemwork.Migrations
                     b.HasIndex("Marking")
                         .IsUnique();
 
-                    b.ToTable("Containers", (string)null);
+                    b.ToTable("Containers");
                 });
 
             modelBuilder.Entity("CargoLoader.Domain.Models.Order", b =>
@@ -159,7 +165,7 @@ namespace CargoLoader.EntityFraemwork.Migrations
                     b.HasIndex("OrderNumber")
                         .IsUnique();
 
-                    b.ToTable("Orders", (string)null);
+                    b.ToTable("Orders");
                 });
 
             modelBuilder.Entity("CargoLoader.Domain.Models.Product", b =>
@@ -196,6 +202,9 @@ namespace CargoLoader.EntityFraemwork.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<byte[]>("Thumbnail")
+                        .HasColumnType("varbinary(max)");
+
                     b.Property<decimal?>("Volume")
                         .HasColumnType("decimal(18,2)");
 
@@ -211,7 +220,7 @@ namespace CargoLoader.EntityFraemwork.Migrations
                     b.HasIndex("Marking")
                         .IsUnique();
 
-                    b.ToTable("Products", (string)null);
+                    b.ToTable("Products");
                 });
 
             modelBuilder.Entity("CargoLoader.Domain.Models.Transport", b =>
@@ -238,7 +247,7 @@ namespace CargoLoader.EntityFraemwork.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Transports", (string)null);
+                    b.ToTable("Transports");
                 });
 
             modelBuilder.Entity("CargoLoader.Domain.Models.Cargo", b =>

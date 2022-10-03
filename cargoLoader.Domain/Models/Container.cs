@@ -1,4 +1,5 @@
-﻿using System;
+﻿using CargoLoader.Domain.Attributes;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
@@ -22,5 +23,7 @@ namespace CargoLoader.Domain.Models
         public bool IsContainer { get; set; } = true;
         public decimal? Capacity { get; set; }
 
+        [Image]
+        public byte[]? Thumbnail { get; set; }
     }
 }

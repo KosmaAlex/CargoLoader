@@ -1,8 +1,10 @@
-﻿using CargoLoader.WPF.ViewModels;
+﻿using CargoLoader.Domain.Attributes;
+using CargoLoader.WPF.ViewModels;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text;
@@ -10,7 +12,10 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
+using System.Windows.Markup;
 using System.Windows.Media;
+using System.Windows.Media.Imaging;
+using System.Xml;
 
 namespace CargoLoader.WPF.Controls
 {
@@ -41,18 +46,46 @@ namespace CargoLoader.WPF.Controls
                     continue;
                 }
 
-
-                Binding binding = new Binding
+                if (property.GetCustomAttribute(typeof(ImageAttribute)) != null)
                 {
-                    Path = new PropertyPath(property.Name),
-                    Mode = BindingMode.OneWay
-                }; 
+                    FrameworkElementFactory factory = new FrameworkElementFactory(typeof(Image));
 
-                                             
-                GridViewColumn gridViewColumn = new GridViewColumn() { Header = property.Name,
-                    DisplayMemberBinding = binding };
-                
-                gridView.Columns.Add(gridViewColumn);
+                    Binding binding = new Binding()
+                    {
+                        Path = new PropertyPath(property.Name),
+                        Mode = BindingMode.OneWay
+                    };
+
+                    factory.SetBinding(Image.SourceProperty, binding);
+
+
+                    GridViewColumn column = new GridViewColumn()
+                    {
+                        CellTemplate = new DataTemplate() { VisualTree = factory }
+                    };
+                    column.Header = property.Name;
+                    column.Width = 80;
+
+                    gridView.Columns.Add(column);
+                }
+                else
+                {
+                    Binding binding = new Binding
+                    {
+                        Path = new PropertyPath(property.Name),
+                        Mode = BindingMode.OneWay
+                    };
+
+                    GridViewColumn column = new GridViewColumn()
+                    {
+                        Header = property.Name,
+                        DisplayMemberBinding = binding
+                    };                                      
+
+                    gridView.Columns.Add(column);
+
+                }               
+
             }
             genericListView.View = gridView;
         }

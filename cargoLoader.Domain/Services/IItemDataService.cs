@@ -9,6 +9,7 @@ namespace CargoLoader.Domain.Services
 {
     public interface IItemDataService<T> : IDataService<T>
     {
+        Task<T> GetByMarkAsync(string mark);
         void QueryByMarking(string? marking);
         void QueryByName(string? name);
         void QueryByLength(decimal? maxLength, decimal? minLength);
@@ -20,8 +21,8 @@ namespace CargoLoader.Domain.Services
         void QueryByIsRotatable(bool? isRotatable);
         void QueryByIsProp(bool? isProp);
         void QueryByIsContainer(bool? isContainer);
-        Task<IEnumerable<T>> GetByCustomProperty(string propertyName, decimal parameter, decimal minParameter);
-        Task<IEnumerable<T>> GetByCustomProperty(string propertyName, bool parameter);
+        void QueryByCustomProperty<TValueType>(string propertyName, TValueType? parameter, TValueType? minParameter);
+        void QueryByCustomProperty<TValueType>(string propertyName, TValueType? parameter);
         Task<int> GetTableCountAsync();
         Task<IEnumerable<T>> GetPageAsync(int page, int pageSize);
         Task<(IEnumerable<T> filteredPage, int filteredPageCount)> ExecuteFilteringQuery(int pageNumber, int pageSize);

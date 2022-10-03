@@ -11,22 +11,18 @@ using System.Windows.Input;
 
 namespace CargoLoader.WPF.ViewModels
 {
-    public class ProductFilterViewModel : ViewModelBase, IFiltersViewModel
+    public class BaseFiltersViewModel<T> : ViewModelBase where T : DomainObject, IItem
     {
-        private readonly IListingNavigator _listingNavigator;
-        private readonly IItemDataService<Product> _productService;
-        
-        public Type FiltersType { get; } = typeof(Product);
-        public IList<IFiltersViewModel> FiltersCollection => _listingNavigator.FiltersCollection;
+        protected readonly IItemDataService<T> _dataService;
+        protected readonly IListingNavigator _listingNavigator;
         public ICommand FilteringCommand { get; }
 
 
-        public ProductFilterViewModel(IListingNavigator listingNavigator, IItemDataService<Product> productService)
+        public BaseFiltersViewModel(IItemDataService<T> dataService, IListingNavigator listingNavigator)
         {
-            _productService = productService;
+            _dataService = dataService;
             _listingNavigator = listingNavigator;
             FilteringCommand = new FilteringCommand(listingNavigator);
-            FiltersCollection.Add(this);
         }
 
         #region Properties
@@ -40,7 +36,7 @@ namespace CargoLoader.WPF.ViewModels
             set
             {
                 _marking = value;
-                _productService.QueryByMarking(_marking);
+                _dataService.QueryByMarking(_marking);
                 OnPropertyChanged(nameof(Marking));
             }
         }
@@ -55,7 +51,7 @@ namespace CargoLoader.WPF.ViewModels
             set
             {
                 _name = value;
-                _productService.QueryByName(_name);
+                _dataService.QueryByName(_name);
                 OnPropertyChanged(nameof(Name));
             }
         }
@@ -64,13 +60,13 @@ namespace CargoLoader.WPF.ViewModels
         public decimal? Width
         {
             get
-            { 
+            {
                 return _width;
             }
             set
             {
                 _width = value;
-                _productService.QueryByWidth(_width, _minWidth);
+                _dataService.QueryByWidth(_width, _minWidth);
                 OnPropertyChanged(nameof(Width));
             }
         }
@@ -86,7 +82,7 @@ namespace CargoLoader.WPF.ViewModels
             set
             {
                 _minWidth = value;
-                _productService.QueryByWidth(_width, _minWidth);
+                _dataService.QueryByWidth(_width, _minWidth);
                 OnPropertyChanged(nameof(MinWidth));
             }
         }
@@ -101,7 +97,7 @@ namespace CargoLoader.WPF.ViewModels
             set
             {
                 _length = value;
-                _productService.QueryByLength(_length, _minLength);
+                _dataService.QueryByLength(_length, _minLength);
                 OnPropertyChanged(nameof(Length));
             }
         }
@@ -117,7 +113,7 @@ namespace CargoLoader.WPF.ViewModels
             set
             {
                 _minLength = value;
-                _productService.QueryByLength(_length, _minLength);
+                _dataService.QueryByLength(_length, _minLength);
                 OnPropertyChanged(nameof(MinLength));
             }
         }
@@ -133,8 +129,8 @@ namespace CargoLoader.WPF.ViewModels
             set
             {
                 _height = value;
-                _productService.QueryByHeight(_height, _minHeight);
-                OnPropertyChanged(nameof(Height));                
+                _dataService.QueryByHeight(_height, _minHeight);
+                OnPropertyChanged(nameof(Height));
             }
         }
 
@@ -149,7 +145,7 @@ namespace CargoLoader.WPF.ViewModels
             set
             {
                 _minHeight = value;
-                _productService.QueryByHeight(_height, _minHeight);
+                _dataService.QueryByHeight(_height, _minHeight);
                 OnPropertyChanged(nameof(MinHeight));
             }
         }
@@ -165,7 +161,7 @@ namespace CargoLoader.WPF.ViewModels
             set
             {
                 _volume = value;
-                _productService.QueryByVolume(_volume, _minVolume);
+                _dataService.QueryByVolume(_volume, _minVolume);
                 OnPropertyChanged(nameof(Volume));
             }
         }
@@ -180,7 +176,7 @@ namespace CargoLoader.WPF.ViewModels
             set
             {
                 _minVolume = value;
-                _productService.QueryByVolume(_volume, _minVolume);
+                _dataService.QueryByVolume(_volume, _minVolume);
                 OnPropertyChanged(nameof(MinVolume));
             }
         }
@@ -195,14 +191,14 @@ namespace CargoLoader.WPF.ViewModels
             set
             {
                 _weight = value;
-                _productService.QueryByWeight(_weight, _minWeight);
+                _dataService.QueryByWeight(_weight, _minWeight);
                 OnPropertyChanged(nameof(Weight));
             }
         }
 
 
         private decimal? _minWeight;
-        public decimal? MinWeight 
+        public decimal? MinWeight
         {
             get
             {
@@ -211,7 +207,7 @@ namespace CargoLoader.WPF.ViewModels
             set
             {
                 _minWeight = value;
-                _productService.QueryByWeight(_weight,_minWeight);
+                _dataService.QueryByWeight(_weight, _minWeight);
                 OnPropertyChanged(nameof(MinWeight));
             }
         }
@@ -226,11 +222,11 @@ namespace CargoLoader.WPF.ViewModels
             set
             {
                 _isFragile = value;
-                _productService.QueryByIsFragile(_isFragile);
+                _dataService.QueryByIsFragile(_isFragile);
                 OnPropertyChanged(nameof(IsFragile));
             }
         }
-                
+
         private bool? _isRotatable;
         public bool? IsRotatable
         {
@@ -241,7 +237,7 @@ namespace CargoLoader.WPF.ViewModels
             set
             {
                 _isRotatable = value;
-                _productService.QueryByIsRotatable(_isRotatable);
+                _dataService.QueryByIsRotatable(_isRotatable);
                 OnPropertyChanged(nameof(IsRotatable));
             }
         }
@@ -257,7 +253,7 @@ namespace CargoLoader.WPF.ViewModels
             set
             {
                 _isProp = value;
-                _productService.QueryByIsProp(_isProp);
+                _dataService.QueryByIsProp(_isProp);
                 OnPropertyChanged(nameof(IsProp));
             }
         }
@@ -273,12 +269,12 @@ namespace CargoLoader.WPF.ViewModels
             set
             {
                 _isContainer = value;
-                _productService.QueryByIsContainer(_isContainer);
+                _dataService.QueryByIsContainer(_isContainer);
                 OnPropertyChanged(nameof(IsContainer));
             }
         }
 
-        //TODO: find another way cast to null values 'Is' properties
+        //TODO: find out if exist better way to cast to null values 'Is' properties
         private bool _fragileCheck;
         public bool FragileCheck
         {
@@ -345,8 +341,5 @@ namespace CargoLoader.WPF.ViewModels
             }
         }
         #endregion
-
-
-
     }
 }

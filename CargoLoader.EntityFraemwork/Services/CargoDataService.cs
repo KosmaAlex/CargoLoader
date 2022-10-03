@@ -78,16 +78,7 @@ namespace CargoLoader.EntityFraemwork.Services
             }
         }
 
-        public async Task<IEnumerable<Cargo>> GetByCustomProperty(string propertyName,
-            decimal parameter, decimal minParameter = Constants.DefaultMinValue)
-        {
-            return await _itemDataService.GetByCustomProperty(propertyName, parameter, minParameter);
-        }
-
-        public async Task<IEnumerable<Cargo>> GetByCustomProperty(string propertyName, bool parameter)
-        {
-            return await _itemDataService.GetByCustomProperty(propertyName, parameter);
-        }
+        
 
         public void QueryByHeight(decimal? maxHeight, decimal? minHeight)
         {
@@ -178,6 +169,31 @@ namespace CargoLoader.EntityFraemwork.Services
 
         
         public Task<(IEnumerable<Cargo> filteredPage, int filteredPageCount)> ExecuteFilteringQuery(int pageNumber, int pageSize)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void QueryByCustomProperty<TValueType>(string propertyName, TValueType? parameter, TValueType? minParameter)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void QueryByCustomProperty<TValueType>(string propertyName, TValueType? parameter)
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool Contains(Cargo entity)
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool Contains(Cargo entity, IEqualityComparer<Cargo> comparer)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<Cargo> GetByMarkAsync(string mark)
         {
             throw new NotImplementedException();
         }

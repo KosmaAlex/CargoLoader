@@ -69,8 +69,10 @@ namespace CargoLoader.WPF.ViewModels
             _genericListView = new GenericListView(this);
             _genericListView.ItemsSource = _items;
 
-            _instantiationPageLoad = async() => await LoadPage(_page);
-            _listingNavigator.StateChanged += _instantiationPageLoad;
+            //_instantiationPageLoad = async () => await LoadPage(_page);
+            //_listingNavigator.StateChanged += _instantiationPageLoad;
+            //Task.Run(()  => LoadPage(_page));
+            Task.Run(()  => StartLoad());
 
             NextPageCommand = new NextListingPageCommand(this);
             PreviousPageCommand = new PreviousListingPageCommand(this);
@@ -82,6 +84,19 @@ namespace CargoLoader.WPF.ViewModels
                 {
                     GoodsPages.Add(this);
                 }
+            }
+        }
+
+        private void StartLoad()
+        {
+            Page = 1;
+            int tableCount = _dataService.GetTableCountAsync().Result;
+            PagesCount = (tableCount + _defaultPageSize - 1) / _defaultPageSize;
+            IEnumerable<T> pageResult = _dataService.GetPageAsync(Page, _defaultPageSize).Result;
+
+            foreach (T item in pageResult)
+            {
+                _items.Add(item);
             }
         }
 
@@ -103,7 +118,8 @@ namespace CargoLoader.WPF.ViewModels
                     _items.Add(item);
                 }
 
-                _listingNavigator.StateChanged -= _instantiationPageLoad;
+                //_listingNavigator.StateChanged -= _instantiationPageLoad;
+                
             }            
         }
 
@@ -148,8 +164,8 @@ namespace CargoLoader.WPF.ViewModels
 
             // TODO: decide.
             // If set property up on this method(where now "_page")
-            // then when property changed and nothing to show in listview
-            // current page property blinks for a half second as 1 then set to 0
+            // then, when property changed and nothing to show in listview,
+            // "current page property" blinks for a half second as 1 then set to 0
             // to prevent it set property there.
             Page = 1;
 

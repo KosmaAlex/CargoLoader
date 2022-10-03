@@ -1,6 +1,7 @@
 ﻿using CargoLoader.WPF.Navigators;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -16,6 +17,11 @@ namespace CargoLoader.WPF.ViewModels
         {
             _navigator = navigator;
             Pages.Add(this);
+
+            
         }
+
+        public List<byte[]> images { get; set; }
+        
     }
 }

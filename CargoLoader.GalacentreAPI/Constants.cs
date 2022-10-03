@@ -16,7 +16,7 @@ namespace CargoLoader.GalacentreAPI
         public const string PropsType = "Тип товара=";
         public const string PropsBrand = "Бренд=";
 
-        public static readonly string[] nonPropMaterials = new string[] { "Стекло", "диоксид циркония", "фарфор",
+        public static readonly string[] NonPropMaterials = new string[] { "Стекло", "диоксид циркония", "фарфор",
             "мрамор", "керамика", "карбон", "парафин", "акрил", "бамбук", "силикон", "полиэстер", "поролон",
                 "хлопок", "картон", "мех", "винил",  "пенополиэтилен", "шерсть"};
 
@@ -29,10 +29,10 @@ namespace CargoLoader.GalacentreAPI
                 "искуственная щетина", "МДФ", "ПЕВА", "спанбонд", "ТЭП"};
 
 
-        public static readonly string[] fragileMaterials = new string[] { "Стекло", "диоксид циркония", "фарфор", "мрамор",
+        public static readonly string[] FragileMaterials = new string[] { "Стекло", "диоксид циркония", "фарфор", "мрамор",
                 "керамика", "карбон", "парафин"};
 
-        public static  readonly string[] nonFragileMaterials = new string[] { "резина", "ПВХ", "Полипропилен", "пластик",
+        public static  readonly string[] NonFragileMaterials = new string[] { "резина", "ПВХ", "Полипропилен", "пластик",
                 "акрил", "металл", "алюминий", "жаропрочный нейлон", "камень", "бамбук", "дерево", "сталь",
                 "силикон", "береза", "бук", "нейлон", "Чугун", "фанера березы", "полиэстер", "медь", "кожа",
                 "поролон", "ПВА", "экокожа", "Оксфорд", "ковролин", "микрофибра", "латунь", "Полиуретан", "латекс",

@@ -1,5 +1,7 @@
-﻿using System;
+﻿using CargoLoader.Domain.Attributes;
+using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -19,5 +21,9 @@ namespace CargoLoader.Domain.Models
         public bool IsRotatable { get; set; }
         public bool IsProp { get; set; }
         public bool IsContainer { get; set; } = false;
+
+        [Image]
+        [Browsable(true)]
+        public byte[]? Thumbnail { get; set; }
     }
 }
