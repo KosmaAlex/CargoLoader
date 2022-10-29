@@ -7,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Linq.Dynamic.Core;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
@@ -20,7 +21,6 @@ namespace CargoLoader.WPF.ViewModels
         private readonly IListingNavigator _listingNavigator;
         private readonly GenericListView _genericListView;
         private int _defaultPageSize = 30;
-        private Action _instantiationPageLoad;
         private bool _filtersActive;
 
 
@@ -68,11 +68,8 @@ namespace CargoLoader.WPF.ViewModels
             _items = new ObservableCollection<T>();
             _genericListView = new GenericListView(this);
             _genericListView.ItemsSource = _items;
-
-            //_instantiationPageLoad = async () => await LoadPage(_page);
-            //_listingNavigator.StateChanged += _instantiationPageLoad;
-            //Task.Run(()  => LoadPage(_page));
-            Task.Run(()  => StartLoad());
+                
+            StartLoad();
 
             NextPageCommand = new NextListingPageCommand(this);
             PreviousPageCommand = new PreviousListingPageCommand(this);
@@ -87,40 +84,39 @@ namespace CargoLoader.WPF.ViewModels
             }
         }
 
-        private void StartLoad()
+        private async Task StartLoad()
         {
-            Page = 1;
-            int tableCount = _dataService.GetTableCountAsync().Result;
-            PagesCount = (tableCount + _defaultPageSize - 1) / _defaultPageSize;
-            IEnumerable<T> pageResult = _dataService.GetPageAsync(Page, _defaultPageSize).Result;
+            IEnumerable<T> pageResult = new List<T>();
+            await Task.Run(async () => 
+            {
+                Page = 1;
+                int tableCount = await _dataService.GetTableCountAsync();
+                PagesCount = (tableCount + _defaultPageSize - 1) / _defaultPageSize;
+                pageResult = await _dataService.GetPageAsync(Page, _defaultPageSize);
+            });
 
             foreach (T item in pageResult)
             {
                 _items.Add(item);
             }
+
         }
 
 
         private async Task LoadPage(int page)
         {
-            if(this == _listingNavigator.CurrentListing ) 
+            _filtersActive = false;
+            Page = page;
+            PagesCount = ((await _dataService.GetTableCountAsync() + _defaultPageSize -1) / _defaultPageSize);
+
+            IEnumerable<T> pageResult = await _dataService.GetPageAsync(page, _defaultPageSize);
+
+            _items.Clear();
+
+            foreach (T item in pageResult)
             {
-                _filtersActive = false;
-                Page = page;
-                PagesCount = ((await _dataService.GetTableCountAsync() + _defaultPageSize -1) / _defaultPageSize);
-
-                IEnumerable<T> pageResult = await _dataService.GetPageAsync(page, _defaultPageSize);
-
-                _items.Clear();
-
-                foreach (T item in pageResult)
-                {
-                    _items.Add(item);
-                }
-
-                //_listingNavigator.StateChanged -= _instantiationPageLoad;
-                
-            }            
+                _items.Add(item);
+            }
         }
 
         private async Task LoadFilteredPage(int page)

@@ -21,7 +21,7 @@ namespace CargoLoader.WPF.ViewModels
             _navigator = navigator;
             _navigator.StateChanged += Navigator_StateChanged;
             UpdateCurrentViewCommand = new UpdateCurrentViewCommand(navigator, pageViewModelFactory);
-            UpdateCurrentViewCommand.Execute(ViewType.Orders);
+            UpdateCurrentViewCommand.Execute(ViewType.Goods);
         }
 
         private void Navigator_StateChanged()

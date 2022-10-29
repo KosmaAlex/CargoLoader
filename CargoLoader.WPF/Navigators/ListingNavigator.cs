@@ -19,8 +19,6 @@ namespace CargoLoader.WPF.Navigators
                 if(value != null)
                 {
                     _currentListing = value;
-                    //_currentFilters = _filtersCollection.FirstOrDefault(f =>
-                    //    f.FiltersType == _currentListing.GetType().GetGenericArguments()[0]);
                     StateChanged.Invoke();
                 }                
             }

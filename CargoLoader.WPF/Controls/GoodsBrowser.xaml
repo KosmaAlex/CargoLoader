@@ -22,23 +22,6 @@
             <RowDefinition Height="auto"/>
         </Grid.RowDefinitions>
 
-
-        <StackPanel Grid.Row="0" Orientation="Horizontal">
-            
-            <Button Height="auto" Width="auto"
-                    Content="GetContainers"
-                    HorizontalAlignment="Right"
-                    Margin="10"
-                    Command="{Binding GetContainersCommand}"/>
-            
-            <Button 
-                Height="auto" Width="auto"
-                Content="GetDataToDb"
-                HorizontalAlignment="Right"
-                Margin="10"
-                Command="{Binding GetDataToDbCommand}"/>
-        </StackPanel>
-
         <Grid Grid.Row="1" Margin="5, 0, 0, 0">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="auto"/>

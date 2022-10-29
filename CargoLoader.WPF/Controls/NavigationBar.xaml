@@ -34,6 +34,7 @@
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
 
             <RadioButton Grid.Column="0" 
@@ -62,6 +63,13 @@
                          Foreground="AntiqueWhite"
                          Command="{Binding UpdateCurrentViewCommand}"
                          CommandParameter="{x:Static nav:ViewType.Transport}"/>
+
+            <RadioButton Grid.Column="4" 
+                         VerticalAlignment="Center"
+                         Content="Resources"
+                         Foreground="AntiqueWhite"
+                         Command="{Binding UpdateCurrentViewCommand}"
+                         CommandParameter="{x:Static nav:ViewType.Resources}"/>
 
         </Grid>
     </Grid>

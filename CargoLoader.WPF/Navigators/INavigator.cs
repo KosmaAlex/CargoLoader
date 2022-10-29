@@ -11,7 +11,8 @@ namespace CargoLoader.WPF.Navigators
     {
         Orders,
         Goods,
-        Transport
+        Transport,
+        Resources
     }
 
     public interface INavigator

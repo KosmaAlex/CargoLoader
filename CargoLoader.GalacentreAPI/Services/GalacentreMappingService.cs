@@ -65,7 +65,7 @@ namespace CargoLoader.GalacentreAPI.Services
 
             foreach (GalacentreDataObject dataObject in sortedObjects)
             {
-                Product product = Map(dataObject);
+                Product product = await Map(dataObject);
 
                 if(product != null)
                 {
@@ -81,7 +81,7 @@ namespace CargoLoader.GalacentreAPI.Services
             return products;
         }
 
-        private Product Map(GalacentreDataObject dataObject)
+        private async Task<Product> Map(GalacentreDataObject dataObject)
         {
             decimal[] dimensions = DimensionsResolver(dataObject, out bool dimensionResolve);
             decimal weight = WeightResolver(dataObject, out bool weightResolve);
@@ -89,7 +89,7 @@ namespace CargoLoader.GalacentreAPI.Services
             bool isRotatable = RotateResolver(dataObject);
             bool isProp = PropResolver(dataObject, out bool propResolve);
             string name = NameResolver(dataObject);
-            byte[] thumbnail = ThumbnailResolverAsync(dataObject);
+            byte[] thumbnail = await ThumbnailResolverAsync(dataObject);
 
             if (fragileResolve && dimensionResolve && propResolve && weightResolve)
             {
@@ -113,13 +113,13 @@ namespace CargoLoader.GalacentreAPI.Services
         }
 
 
-        private byte[] ThumbnailResolverAsync(GalacentreDataObject dataObject)
+        private async Task<byte[]> ThumbnailResolverAsync(GalacentreDataObject dataObject)
         {
             byte[] thumbnail;
 
             if (!string.IsNullOrEmpty(dataObject.Image))
             {
-                byte[] temp =  _httpService.GetImageAsync(dataObject.Image).Result;
+                byte[] temp =  await _httpService.GetImageAsync(dataObject.Image);
                 
                 thumbnail = CreateThumbnail(temp, dataObject);
 
@@ -127,7 +127,7 @@ namespace CargoLoader.GalacentreAPI.Services
             }
             else
             {
-                string filePath = @"C:\Users\AlexK\source\repos\CargoLoader\cargoLoader.Domain\Resources\no_image.jpeg";
+                string filePath = @"C:\Users\AlexK\source\repos\KosmaAlex\CargoLoader\cargoLoader.Domain\Resources\no_image.jpeg";
 
                 thumbnail = File.ReadAllBytes(filePath);
 
@@ -144,8 +144,9 @@ namespace CargoLoader.GalacentreAPI.Services
                 Bitmap bitmap = new Bitmap(stream);
                 int size = 200;
                 Bitmap resizedBitmap = new Bitmap(bitmap, size, size);
+                //TODO: forgot why is this here
                 resizedBitmap.Save(resizedStream, ImageFormat.Png);
-                resizedBitmap.Save(@"C:\Users\AlexK\Desktop\ProdThum\" + dataObject.Id + ".jpg", ImageFormat.Jpeg);
+                resizedBitmap.Save(@"C:\Users\AlexK\source\repos\KosmaAlex\CargoLoader\Demo\Res\ProdThum\" + dataObject.Id + ".jpg", ImageFormat.Jpeg);
                 thumbnail = resizedStream.ToArray();
                 return thumbnail;
             }

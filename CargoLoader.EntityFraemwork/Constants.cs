@@ -12,5 +12,10 @@ namespace CargoLoader.EntityFraemwork
 
         public static readonly string[] Allowed = new string[] { "Allowed", "yes" };
         public static readonly string[] Forbidden = new string[] { "Forbidden", "no" };
+
+        public const char SeparatorCSV = ',';
+        public const char Comma = ',';
+        public const char Dot = '.';
+        public const string ImageSaveFormat = ".jpg";
     }
 }

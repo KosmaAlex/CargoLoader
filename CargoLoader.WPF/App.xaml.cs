@@ -2,6 +2,8 @@
 using CargoLoader.Domain.Services;
 using CargoLoader.EntityFraemwork;
 using CargoLoader.EntityFraemwork.Services;
+using CargoLoader.EntityFraemwork.Services.Common;
+using CargoLoader.EntityFraemwork.Services.Export;
 using CargoLoader.GalacentreAPI;
 using CargoLoader.GalacentreAPI.Models;
 using CargoLoader.GalacentreAPI.Services;
@@ -56,11 +58,14 @@ namespace CargoLoader.WPF
                     services.AddDbContext<CargoLoaderDbContext>(o => o.UseSqlServer("Server=(localdb)\\mssqllocaldb;Database=CargoLoader;Trusted_Connection=True;"));
                     services.AddSingleton<CargoLoaderDbContextFactory>(new CargoLoaderDbContextFactory(connectionString));
 
-
                     services.AddSingleton<ICargoDataService, CargoDataService>();
                     services.AddSingleton<IItemDataService<Product>, ItemDataService<Product>>();
                     services.AddSingleton<IItemDataService<Container>, ItemDataService<Container>>();
                     services.AddSingleton<IOrderDataService, OrderDataService>();
+
+                    services.AddSingleton<IExportService<Product>, ExportService<Product>>();
+                    services.AddSingleton<IExportService<Container>, ExportService<Container>>();
+
 
                     services.AddSingleton<INavigator, Navigator>();
                     services.AddSingleton<IListingNavigator, ListingNavigator>();
@@ -68,6 +73,7 @@ namespace CargoLoader.WPF
                     services.AddSingleton<OrdersViewModel>();
                     services.AddSingleton<GoodsViewModel>();
                     services.AddSingleton<TransportViewModel>();
+                    services.AddSingleton<ResourcesViewModel>();
 
                     services.AddSingleton<IPageViewModelFactory, PageViewModelFactory>();
                     services.AddSingleton<CreatePageViewModel<OrdersViewModel>>(services => 
@@ -76,6 +82,8 @@ namespace CargoLoader.WPF
                     () => services.GetRequiredService<GoodsViewModel>());
                     services.AddSingleton<CreatePageViewModel<TransportViewModel>>(services => 
                     () => services.GetRequiredService<TransportViewModel>());
+                    services.AddSingleton<CreatePageViewModel<ResourcesViewModel>>(services =>
+                    () => services.GetRequiredService<ResourcesViewModel>());
 
 
                     services.AddSingleton<ListingViewModel<Product>>();
@@ -101,6 +109,7 @@ namespace CargoLoader.WPF
 
                     //TODO: think about interface or not
                     services.AddSingleton<GalacentreMappingService>();
+
 
                     services.AddScoped<MainWindow>(s => new MainWindow(s.GetRequiredService<MainViewModel>()));
                 });

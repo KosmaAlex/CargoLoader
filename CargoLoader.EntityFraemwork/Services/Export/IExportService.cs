@@ -4,10 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace CargoLoader.WPF
+namespace CargoLoader.EntityFraemwork.Services.Export
 {
-    public class Constants
+    public interface IExportService<T>
     {
-        public const string ViewModelTrim = "ViewModel";        
+        Task ExportToCSV(string filePath);
     }
 }

@@ -11,7 +11,7 @@ namespace CargoLoader.EntityFraemwork.Services.Mappers
     {
         public IEnumerable<Container> Map(string filePath = default)
         {
-            filePath = @"C:\Users\AlexK\source\repos\CargoLoader\Demo\Res\ContainersList.csv";
+            //filePath = @"C:\Users\AlexK\source\repos\KosmaAlex\CargoLoader\Demo\Res\ContainersList.csv";
 
             List<Container> result = new List<Container>();
 
@@ -95,10 +95,10 @@ namespace CargoLoader.EntityFraemwork.Services.Mappers
 
         private bool GetThumbnail(string name, ref byte[] image)
         {
-            string path = @"C:\Users\AlexK\source\repos\CargoLoader\Demo\Res\ContThum\";
+            string path = @"C:\Users\AlexK\source\repos\KosmaAlex\CargoLoader\Demo\Res\ContThum\";
 
             //DirectoryInfo dirInfo = 
-            //    new DirectoryInfo(@"C:\Users\AlexK\source\repos\CargoLoader\Demo\Res\ContThum\");
+            //    new DirectoryInfo(@"C:\Users\AlexK\source\repos\KosmaAlex\CargoLoader\Demo\Res\ContThum\");
 
             string[] images = Directory.GetFiles(path);
 
