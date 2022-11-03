@@ -17,30 +17,30 @@ namespace CargoLoader.EntityFraemwork.Services
     public class ItemDataService<T> : IItemDataService<T> where T : DomainObject, IItem
     {
         private readonly CargoLoaderDbContextFactory _contextFactory;
-        private readonly NonQueryDataService<T> _nonQueryDataService;
+        private readonly NonQueryDataService _nonQueryDataService;
         private readonly Dictionary<string, Func<IQueryable<T>,IQueryable<T>>> _queries;
 
 
         public ItemDataService(CargoLoaderDbContextFactory contextFactory)
         {
             _contextFactory = contextFactory;
-            _nonQueryDataService = new NonQueryDataService<T>(contextFactory);
+            _nonQueryDataService = new NonQueryDataService(contextFactory);
             _queries = new Dictionary<string, Func<IQueryable<T>, IQueryable<T>>>();
         }
 
-        public async Task Create(T entity)
+        public async Task Create<T1>(T1 entity) where T1 : DomainObject
         {
-            await _nonQueryDataService.Create(entity);
+            await _nonQueryDataService.Create<T1>(entity);
         }
 
-        public async Task<bool> Delete(int id)
+        public async Task<bool> Delete<T1>(int id) where T1 : DomainObject
         {
-            return await _nonQueryDataService.Delete(id);
+            return await _nonQueryDataService.Delete<T1>(id);
         }
 
-        public async Task<T> Get(int id)
+        public async Task<T1> Get<T1>(int id) where T1 : DomainObject
         {
-            T result = await _nonQueryDataService.Get(id);
+            T1 result = await _nonQueryDataService.Get<T1>(id);
             return result;
         }
 
@@ -52,14 +52,14 @@ namespace CargoLoader.EntityFraemwork.Services
                 return entity;
             }
         }
-        public async Task<IEnumerable<T>> GetAll()
+        public async Task<IEnumerable<T1>> GetAll<T1>() where T1 : DomainObject
         {
-            return await _nonQueryDataService.GetAll();
+            return await _nonQueryDataService.GetAll<T1>();
         }        
 
-        public bool Contains(T entity, IEqualityComparer<T> comparer)
+        public bool Contains<T1>(T1 entity, IEqualityComparer<T1> comparer) where T1 : DomainObject
         {
-            return _nonQueryDataService.Contains(entity, comparer);
+            return _nonQueryDataService.Contains<T1>(entity, comparer);
         }
 
         public void QueryByCustomProperty<TValueType>(string propertyName, TValueType? parameter)
@@ -351,9 +351,9 @@ namespace CargoLoader.EntityFraemwork.Services
             _queries.Add(nameof(QueryByWidth), query);
         }
 
-        public async Task<T> Update(int id, T entity)
+        public async Task<T1> Update<T1>(int id, T1 entity) where T1 : DomainObject
         {
-            return await _nonQueryDataService.Update(id, entity);
+            return await _nonQueryDataService.Update<T1>(id, entity);
         }
 
         public async Task<int> GetTableCountAsync()

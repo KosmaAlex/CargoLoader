@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace CargoLoader.EntityFraemwork.Services
 {
-    public class CargoDataService : ICargoDataService
+    public class CargoDataService //: ICargoDataService
     {
         private readonly CargoLoaderDbContextFactory _contextFactory;
         private readonly ItemDataService<Cargo> _itemDataService;
@@ -27,20 +27,20 @@ namespace CargoLoader.EntityFraemwork.Services
             await _itemDataService.Create(entity);
         }
 
-        public async Task<bool> Delete(int id)
-        {
-            return await _itemDataService.Delete(id);
-        }
+        //public async Task<bool> Delete(int id)
+        //{
+        //    return await _itemDataService.Delete(id);
+        //}
 
-        public async Task<Cargo> Get(int id)
-        {
-            return await _itemDataService.Get(id);
-        }
+        //public async Task<Cargo> Get(int id)
+        //{
+        //    return await _itemDataService.Get(id);
+        //}
 
-        public async Task<IEnumerable<Cargo>> GetAll()
-        {
-            return await _itemDataService.GetAll();
-        }
+        //public async Task<IEnumerable<Cargo>> GetAll()
+        //{
+        //    return await _itemDataService.GetAll();
+        //}
 
         public async Task<IEnumerable<Cargo>> GetByContainedCargo(Cargo containedCargo)
         {

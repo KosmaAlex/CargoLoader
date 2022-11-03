@@ -13,7 +13,7 @@ using System.Threading.Tasks;
 
 namespace CargoLoader.EntityFraemwork.Services.Common
 {
-    public class NonQueryDataService<T> : IDataService<T> where T : DomainObject 
+    public class NonQueryDataService : IDataService
     {
         private readonly CargoLoaderDbContextFactory _contextFactory;
 
@@ -22,7 +22,7 @@ namespace CargoLoader.EntityFraemwork.Services.Common
             _contextFactory = contextFactory;
         }
 
-        public async Task Create(T entity)
+        public async Task Create<T>(T entity) where T : DomainObject
         {
             using (CargoLoaderDbContext context = _contextFactory.CreateContext())
             {
@@ -37,7 +37,7 @@ namespace CargoLoader.EntityFraemwork.Services.Common
                 }    
             }
         }
-        public async Task<bool> Delete(int id)
+        public async Task<bool> Delete<T>(int id) where T : DomainObject
         {
             using(CargoLoaderDbContext context = _contextFactory.CreateContext())
             {
@@ -56,7 +56,7 @@ namespace CargoLoader.EntityFraemwork.Services.Common
             }
         }
 
-        public async Task<T> Get(int id)
+        public async Task<T> Get<T>(int id) where T : DomainObject
         {
             using (CargoLoaderDbContext context = _contextFactory.CreateContext())
             {
@@ -72,7 +72,7 @@ namespace CargoLoader.EntityFraemwork.Services.Common
             }
         }
 
-        public async Task<IEnumerable<T>> GetAll()
+        public async Task<IEnumerable<T>> GetAll<T>() where T : DomainObject
         {
             using (CargoLoaderDbContext context = _contextFactory.CreateContext())
             {
@@ -81,7 +81,7 @@ namespace CargoLoader.EntityFraemwork.Services.Common
             }
         }
 
-        public async Task<T> Update(int id, T entity)
+        public async Task<T> Update<T>(int id, T entity) where T : DomainObject
         {
             using (CargoLoaderDbContext context = _contextFactory.CreateContext())
             {
@@ -94,7 +94,7 @@ namespace CargoLoader.EntityFraemwork.Services.Common
             }
         }
 
-        public bool Contains(T entity, IEqualityComparer<T> comparer)
+        public bool Contains<T>(T entity, IEqualityComparer<T> comparer) where T : DomainObject
         {
             using(CargoLoaderDbContext context = _contextFactory.CreateContext())
             {

@@ -12,10 +12,10 @@ namespace CargoLoader.WPF.Commands
 {
     public class ExportContainerFromDbCommand : ICommand
     {
-        private readonly IExportService<Container> _exportService;
+        private readonly IExportService _exportService;
         private readonly ResourcesViewModel _resourcesViewModel;
 
-        public ExportContainerFromDbCommand(IExportService<Container> exportService, ResourcesViewModel resourcesViewModel)
+        public ExportContainerFromDbCommand(IExportService exportService, ResourcesViewModel resourcesViewModel)
         {
             _exportService = exportService;
             _resourcesViewModel = resourcesViewModel;
@@ -30,7 +30,7 @@ namespace CargoLoader.WPF.Commands
 
         public void Execute(object? parameter)
         {
-            _exportService.ExportToCSV(_resourcesViewModel.ExportFolder);
+            //_exportService.ExportToCSV<Container>(_resourcesViewModel.ExportFolder);
         }
     }
 }

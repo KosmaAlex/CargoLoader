@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace CargoLoader.Domain.Services
 {
-    public interface IOrderDataService : IDataService<Order>
+    public interface IOrderDataService : IDataService
     {
         Task<Order> GetByOrderNumber(string orderNumber);
     }

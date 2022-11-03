@@ -11,21 +11,22 @@ using System.Threading.Tasks;
 
 namespace CargoLoader.EntityFraemwork.Services.Export
 {
-    public class ExportService<T> : IExportService<T> where T : IItem
+    public class ExportService : IExportService 
     {
-        private readonly IItemDataService<T> _dataService;
+        private readonly IDataService _dataService;
 
-        private readonly string _commonFileName = $@"{typeof(T).Name}{DateTime.Today.ToString().Remove(10)}";
-        private readonly string _imageFolder = $@"{typeof(T).Name}Image\";
         
-        public ExportService(IItemDataService<T> dataService)
+        
+        public ExportService(IDataService dataService)
         {
             _dataService = dataService;
         }
 
-        public async Task ExportToCSV(string filePath)
+        public async Task ExportToCSV<T>(string filePath)where T : DomainObject, IItem
         {
-            IEnumerable<T> items = await _dataService.GetAll();
+            IEnumerable<T> items = await _dataService.GetAll<T>();
+            string _commonFileName = $@"{typeof(T).Name}{DateTime.Today.ToString().Remove(10)}";
+            string _imageFolder = $@"{typeof(T).Name}Image\";
             string fileName = _commonFileName + ".csv";
 
             PropertyInfo[] props = typeof(T).GetProperties();

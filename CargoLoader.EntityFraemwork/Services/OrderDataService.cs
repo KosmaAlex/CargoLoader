@@ -11,15 +11,15 @@ using System.Threading.Tasks;
 
 namespace CargoLoader.EntityFraemwork.Services
 {
-    public class OrderDataService : IOrderDataService
+    public class OrderDataService //: IOrderDataService
     {
         private readonly CargoLoaderDbContextFactory _contextFactory;
-        private readonly NonQueryDataService<Order> _nonQueryDataService;
+        private readonly NonQueryDataService _nonQueryDataService;
 
         public OrderDataService(CargoLoaderDbContextFactory contextFactory)
         {
             _contextFactory = contextFactory;
-            _nonQueryDataService = new NonQueryDataService<Order>(contextFactory);
+            _nonQueryDataService = new NonQueryDataService(contextFactory);
         }
 
         public bool Contains(Order entity)
@@ -48,9 +48,9 @@ namespace CargoLoader.EntityFraemwork.Services
             }
         }
 
-        public async Task<bool> Delete(int id)
+        public async Task<bool> Delete<T>(int id) where T : DomainObject
         {
-            return await _nonQueryDataService.Delete(id);
+            return await _nonQueryDataService.Delete<T>(id);
         }
 
         public async Task<Order> Get(int id)

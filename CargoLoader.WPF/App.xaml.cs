@@ -58,13 +58,17 @@ namespace CargoLoader.WPF
                     services.AddDbContext<CargoLoaderDbContext>(o => o.UseSqlServer("Server=(localdb)\\mssqllocaldb;Database=CargoLoader;Trusted_Connection=True;"));
                     services.AddSingleton<CargoLoaderDbContextFactory>(new CargoLoaderDbContextFactory(connectionString));
 
-                    services.AddSingleton<ICargoDataService, CargoDataService>();
+                    //services.AddSingleton<ICargoDataService, CargoDataService>();
                     services.AddSingleton<IItemDataService<Product>, ItemDataService<Product>>();
                     services.AddSingleton<IItemDataService<Container>, ItemDataService<Container>>();
-                    services.AddSingleton<IOrderDataService, OrderDataService>();
+                    //services.AddSingleton<IOrderDataService, OrderDataService>();
 
-                    services.AddSingleton<IExportService<Product>, ExportService<Product>>();
-                    services.AddSingleton<IExportService<Container>, ExportService<Container>>();
+                    services.AddSingleton<IExportService, ExportService>();
+                    //services.AddSingleton<IExportService<Container>, ExportService<Container>>();
+
+                    //
+                    services.AddSingleton<IDataService, NonQueryDataService>();
+                    //
 
 
                     services.AddSingleton<INavigator, Navigator>();

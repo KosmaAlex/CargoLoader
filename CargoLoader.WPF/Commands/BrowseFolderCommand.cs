@@ -22,8 +22,8 @@ namespace CargoLoader.WPF.Commands
         {
             _viewModel = viewModel;
             _dialog = new VistaFolderBrowserDialog();
-            _viewModel.ExportFolder = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + '\\';
-            _dialog.SelectedPath = _viewModel.ExportFolder;
+            //_viewModel.ExportFolder = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + '\\';
+            //_dialog.SelectedPath = _viewModel.ExportFolder;
         }
 
         public event EventHandler? CanExecuteChanged;
@@ -39,7 +39,7 @@ namespace CargoLoader.WPF.Commands
             if (_dialog.ShowDialog() == true)
             {
                 _dialog.SelectedPath = _dialog.SelectedPath + "\\";
-                _viewModel.ExportFolder = _dialog.SelectedPath;
+                //_viewModel.ExportFolder = _dialog.SelectedPath;
             }
         }
     }

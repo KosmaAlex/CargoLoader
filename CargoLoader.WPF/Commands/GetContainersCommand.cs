@@ -13,12 +13,12 @@ namespace CargoLoader.WPF.Commands
     public class GetContainersCommand : ICommand
     {
         private readonly CSVContainerMapper _mapper = new CSVContainerMapper();
-        private readonly IItemDataService<Container> _service;
+        private readonly IDataService _service;
 
         public event EventHandler? CanExecuteChanged;
 
 
-        public GetContainersCommand(IItemDataService<Container> service)
+        public GetContainersCommand(IDataService service)
         {
             _service = service;
         }

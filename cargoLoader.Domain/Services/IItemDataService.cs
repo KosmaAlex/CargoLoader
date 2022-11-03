@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace CargoLoader.Domain.Services
 {
-    public interface IItemDataService<T> : IDataService<T>
+    public interface IItemDataService<T> : IDataService
     {
         Task<T> GetByMarkAsync(string mark);
         void QueryByMarking(string? marking);

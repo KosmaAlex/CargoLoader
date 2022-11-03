@@ -12,13 +12,15 @@ namespace CargoLoader.WPF.Commands
 {
     public class ExportProductFromDbCommand : ICommand
     {
-        private readonly IExportService<Product> _exportService;
+        private readonly IExportService _exportService;
         private readonly ResourcesViewModel _resourcesViewModel;
+        private readonly ExportImportMenuViewModel _exportMenuViewModel;
 
-        public ExportProductFromDbCommand(IExportService<Product> exportService, ResourcesViewModel resourcesViewModel)
+        public ExportProductFromDbCommand(IExportService exportService, ResourcesViewModel resourcesViewModel)
         {
             _exportService = exportService;
             _resourcesViewModel = resourcesViewModel;
+            _exportMenuViewModel = new ExportImportMenuViewModel();
         }
 
         public event EventHandler? CanExecuteChanged;
@@ -30,7 +32,15 @@ namespace CargoLoader.WPF.Commands
 
         public void Execute(object? parameter)
         {
-            _exportService.ExportToCSV(_resourcesViewModel.ExportFolder);
+            if(_exportMenuViewModel.ProductCheck)
+            {
+                //_exportService.ExportToCSV<Product>(_resourcesViewModel.ExportFolder);
+            }
+            if (_exportMenuViewModel.ContainerCheck)
+            {
+                //_exportService.ExportToCSV<Container>(_resourcesViewModel.ExportFolder);
+            }
+            
         }
     }
 }
